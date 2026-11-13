@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operación Lince — 50 Niveles de Alta Inteligencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+<style>
+  :root {
+    --background: #171d15;
+    --foreground: #d8e6cf;
+    --muted-foreground: #7d9070;
+    --primary: #a3f04a;
+    --primary-foreground: #171d15;
+    --accent: #f2c94c;
+    --shadow: #2c3a22;
+    --panel: rgba(18, 26, 16, 0.92);
+    --pad-bg: #223019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: "Press Start 2P", "Courier New", monospace;
+    line-height: 1.6;
+  }
+  main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0.5rem;
+  }
+  header { text-align: center; }
+  h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--primary);
+    text-shadow: 0 0 12px rgba(163, 240, 74, 0.6), 3px 3px 0 var(--shadow);
+  }
+  .sub { margin: 0.4rem 0 0; font-size: 0.6rem; color: var(--muted-foreground); }
+  .wrap { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 0.8rem; }
+  .hud {
+    display: flex; justify-content: space-between; gap: 0.5rem;
+    font-size: 0.65rem; background: #121a10; padding: 0.6rem; border: 2px solid var(--shadow);
+  }
+  .hud .name { color: var(--primary); }
+  .hud .chip-no { color: var(--muted-foreground); }
+  .hud .chip-ok { color: var(--accent); }
+  .stage {
+    position: relative;
+    width: 100%;
+    border: 4px solid var(--primary);
+    box-shadow: 0 0 25px rgba(163, 240, 74, 0.3);
+    background: #000;
+  }
+  canvas {
+    display: block; width: 100%; height: auto;
+    image-rendering: pixelated; image-rendering: crisp-edges;
+    cursor: crosshair; touch-action: none;
+  }
+  .overlay {
+    position: absolute; inset: 0; z-index: 10;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 1rem; background: var(--panel);
+  }
+  .overlay[hidden] { display: none !important; }
+  .overlay h2 { margin: 0 0 0.8rem; font-size: 0.9rem; color: var(--primary); }
+  .overlay p { margin: 0 0 0.5rem; font-size: 0.6rem; max-width: 28rem; }
+  .pixel-btn {
+    margin-top: 1rem;
+    background: var(--primary); color: var(--primary-foreground);
+    border: 0; padding: 0.75rem 1.25rem; font-size: 0.65rem;
+    font-family: inherit;
+    box-shadow: 4px 4px 0 var(--shadow); cursor: pointer;
+  }
+  .pixel-btn:hover { background: #b8f564; }
+  .pixel-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--shadow); }
+  .help { font-size: 0.55rem; color: var(--muted-foreground); text-align: center; }
+  .pad { display: none; width: 100%; justify-content: space-between; align-items: center; user-select: none; }
+  .pad-grid { display: grid; grid-template-columns: repeat(3, 3.2rem); grid-auto-rows: 3.2rem; gap: 0.25rem; }
+  .pad-btn {
+    width: 3.2rem; height: 3.2rem; font-size: 0.85rem; color: var(--primary);
+    border: 2px solid var(--primary); background: var(--pad-bg); font-family: inherit; cursor: pointer;
+  }
+  .pad-btn:active { background: var(--primary); color: var(--primary-foreground); }
+  .pad-btn-lg { width: 5.5rem; height: 5.5rem; border-radius: 9999px; font-size: 0.55rem; }
+  @media (max-width: 768px) { .pad { display: flex; } .help { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>OPERACIÓN LINCE</h1>
+    <p class="sub">50 NIVELES · IA AVANZADA & MULTIPLICACIÓN DE ENEMIGOS</p>
+  </header>
+
+  <div class="wrap">
+    <div class="hud">
+      <span class="name" id="hud-name">NIVEL 1 / 50</span>
+      <span class="chip-no" id="hud-chip">□ BUSCA EL CHIP</span>
+    </div>
+
+    <div class="stage">
+      <canvas id="game" width="320" height="240"></canvas>
+      <div class="overlay" id="overlay">
+        <h2 id="ov-title">OPERACIÓN LINCE</h2>
+        <div id="ov-lines"></div>
+        <button class="pixel-btn" id="ov-btn">INICIAR ▶</button>
+      </div>
+    </div>
+
+    <p class="help">TECLAS W,A,S,D / FLECHAS: MOVER · C / SHIFT: AGACHARSE · CLIC: DARDO SEDANTE · ¡LOS GUARDIAS INVESTIGAN Y PERSIGUEN!</p>
+
+    <div class="pad">
+      <div class="pad-grid">
+        <span></span><button class="pad-btn" id="btn-up">▲</button><span></span>
+        <button class="pad-btn" id="btn-left">◀</button><span></span><button class="pad-btn" id="btn-right">▶</button>
+        <span></span><button class="pad-btn" id="btn-down">▼</button><span></span>
+      </div>
+      <button class="pad-btn pad-btn-lg" id="btn-crouch">AGACHAR</button>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var TOTAL_LEVELS = 50;
+  var T = 16, W = 20, H = 15;
+  var P = {
+    floor: "#2b3a2a", floor2: "#304030", wall: "#141c14", wallTop: "#4d5e3c",
+    grass: "#3f6b2a", grass2: "#5a8a34", chip: "#f2c94c", exit: "#56ccf2",
+    player: "#e0e0d0", suit: "#2d6a8a", guard: "#b33a3a", guardAlert: "#ff2222",
+    cone: "rgba(255,230,120,0.2)", coneAlert: "rgba(255,60,60,0.4)"
+  };
+
+  var canvas = document.getElementById("game");
+  var ctx = canvas.getContext("2d");
+  var overlay = document.getElementById("overlay");
+  var ovTitle = document.getElementById("ov-title");
+  var ovLines = document.getElementById("ov-lines");
+  var ovBtn = document.getElementById("ov-btn");
+  var hudName = document.getElementById("hud-name");
+  var hudChip = document.getElementById("hud-chip");
+
+  var keys = {};
+  var levelIdx = 0;
+  var currentLevelData = null;
+  var phase = "intro";
+  var pl = { x: 0, y: 0 };
+  var guards = [], darts = [];
+  var chip = false, seen = 0, hidden = false;
+  var cooldown = 0, t = 0, last = 0, raf = 0;
+
+  function generateLevel(num) {
+    var progress = (num - 1) / (TOTAL_LEVELS - 1);
+    
+    // Aumento masivo y real de enemigos: desde 3 hasta 16 enemigos simultáneos en los niveles altos
+    var numGuards = Math.min(16, Math.floor(3 + progress * 13));
+    
+    var speed = 1.6 + progress * 1.5; // Mucho más rápidos en niveles avanzados
+    var sleepTime = Math.max(2.5, 8 - progress * 5.5); // El dardo dura menos
+
+    var grid = [];
+    var y, x;
+    for (y = 0; y < H; y++) {
+      grid[y] = [];
+      for (x = 0; x < W; x++) {
+        if (x === 0 || y === 0 || x === W - 1 || y === H - 1) grid[y][x] = '#';
+        else grid[y][x] = '.';
+      }
+    }
+
+    var numObstacles = Math.floor(12 + progress * 6);
+    for (var o = 0; o < numObstacles; o++) {
+      var ox = Math.floor(2 + Math.random() * (W - 5));
+      var oy = Math.floor(2 + Math.random() * (H - 5));
+      var ow = Math.floor(1 + Math.random() * 3);
+      var oh = Math.floor(1 + Math.random() * 3);
+      for (y = oy; y < Math.min(H - 2, oy + oh); y++) {
+        for (x = ox; x < Math.min(W - 2, ox + ow); x++) {
+          grid[y][x] = '#';
+        }
+      }
+    }
+
+    var numGrass = Math.max(2, Math.floor(6 - progress * 4)); // Menos hierba en niveles altos para aumentar la dificultad
+    for (var g = 0; g < numGrass; g++) {
+      var gx = Math.floor(1 + Math.random() * (W - 3));
+      var gy = Math.floor(1 + Math.random() * (H - 3));
+      for (y = gy; y < Math.min(H - 1, gy + 2); y++) {
+        for (x = gx; x < Math.min(W - 1, gx + 2); x++) {
+          if (grid[y][x] === '.') grid[y][x] = ',';
+        }
+      }
+    }
+
+    grid[1][1] = 'S';
+    grid[1][2] = '.'; grid[2][1] = '.';
+
+    var keyX = W - 2, keyY = 2;
+    grid[keyY][keyX] = 'K';
+    grid[keyY][keyX - 1] = '.'; grid[keyY + 1][keyX] = '.';
+
+    var exitX = W - 2, exitY = H - 2;
+    grid[exitY][exitX] = 'E';
+    grid[exitY][exitX - 1] = '.'; grid[exitY - 1][exitX] = '.';
+
+    var mapStrings = grid.map(function(r) { return r.join(''); });
+
+    var generatedGuards = [];
+    for (var i = 0; i < numGuards; i++) {
+      var p1x = Math.floor(2 + Math.random() * (W - 4));
+      var p1y = Math.floor(2 + Math.random() * (H - 4));
+      var p2x = Math.floor(2 + Math.random() * (W - 4));
+      var p2y = Math.floor(2 + Math.random() * (H - 4));
+
+      grid[p1y][p1x] = '.';
+      grid[p2y][p2x] = '.';
+
+      // Generar rutas de patrulla más complejas o múltiples waypoints basados en el nivel
+      var waypoints = [[p1x, p1y], [p2x, p2y]];
+      if (num > 15) {
+        var p3x = Math.floor(2 + Math.random() * (W - 4));
+        var p3y = Math.floor(2 + Math.random() * (H - 4));
+        waypoints.push([p3x, p3y]);
+      }
+
+      generatedGuards.push({
+        path: waypoints,
+        speed: speed + (Math.random() * 0.4 - 0.2),
+        coneAngle: 0.55 + progress * 0.25 // Cono más amplio en niveles altos
+      });
+    }
+
+    return {
+      name: "NIVEL " + num + " / " + TOTAL_LEVELS,
+      sleepTime: sleepTime,
+      intro: [
+        "Infiltración Nivel " + num + " de 50.",
+        "Enemigos activos: " + numGuards + " | Alerta: " + Math.floor(progress * 100) + "%",
+        "Los guardias ahora persiguen y buscan activamente."
+      ],
+      map: mapStrings,
+      guards: generatedGuards
+    };
+  }
+
+  function solid(l, x, y) {
+    var tx = Math.floor(x / T), ty = Math.floor(y / T);
+    return tx < 0 || ty < 0 || tx >= W || ty >= H || l.map[ty].charAt(tx) === "#";
+  }
+  function tileAt(l, x, y) {
+    var row = l.map[Math.floor(y / T)];
+    if (!row) return "#";
+    return row.charAt(Math.floor(x / T)) || "#";
+  }
+  function find(l, c) {
+    for (var y = 0; y < H; y++) {
+      var x = l.map[y].indexOf(c);
+      if (x >= 0) return { x: x * T + 8, y: y * T + 8 };
+    }
+    return { x: 24, y: 24 };
+  }
+  function lineClear(l, ax, ay, bx, by) {
+    var d = Math.hypot(bx - ax, by - ay), n = Math.ceil(d / 4);
+    for (var i = 1; i < n; i++) {
+      if (solid(l, ax + ((bx - ax) * i) / n, ay + ((by - ay) * i) / n)) return false;
+    }
+    return true;
+  }
+
+  function updateHud() {
+    hudName.textContent = currentLevelData.name;
+    hudChip.textContent = chip ? "■ CHIP OK → SALIDA" : "□ BUSCA EL CHIP";
+    hudChip.className = chip ? "chip-ok" : "chip-no";
+  }
+
+  function showOverlay(title, lines, btn) {
+    ovTitle.textContent = title;
+    ovLines.innerHTML = "";
+    lines.forEach(function (s) {
+      var p = document.createElement("p");
+      p.textContent = s;
+      ovLines.appendChild(p);
+    });
+    ovBtn.textContent = btn;
+    overlay.removeAttribute("hidden");
+  }
+
+  function setPhase(next) {
+    phase = next;
+    if (raf) cancelAnimationFrame(raf);
+    if (next === "intro") {
+      currentLevelData = generateLevel(levelIdx + 1);
+      updateHud();
+      showOverlay(currentLevelData.name, currentLevelData.intro, "INICIAR ▶");
+    } else if (next === "caught") {
+      showOverlay("¡TE DESCUBRIERON!", ["Te cazaron en el Nivel " + (levelIdx + 1) + "."], "REINTENTAR");
+    } else if (next === "won") {
+      showOverlay("ZONA SUPERADA", ["¡Excelente avance táctico!"], "SIGUIENTE ▶");
+    } else if (next === "end") {
+      showOverlay("¡MISIÓN COMPLETADA!", [
+        "Has superado los 50 niveles con IA de combate avanzada.",
+        "¡Eres una leyenda del sigilo mundial!"
+      ], "REINICIAR");
+    } else if (next === "play") {
+      overlay.setAttribute("hidden", "true");
+      startPlay();
+    }
+  }
+
+  function startPlay() {
+    var l = currentLevelData;
+    pl = find(l, "S");
+    chip = false; seen = 0; t = 0; cooldown = 0;
+    darts = [];
+    guards = l.guards.map(function (g) {
+      return {
+        x: g.path[0][0] * T + 8,
+        y: g.path[0][1] * T + 8,
+        wp: 1 % g.path.length,
+        dir: 0, pause: 0, sleep: 0,
+        state: "patrol", // patrol, alert, chase
+        investigateX: 0, investigateY: 0,
+        coneAngle: g.coneAngle || 0.55,
+        speed: g.speed
+      };
+    });
+    updateHud();
+    last = performance.now();
+    raf = requestAnimationFrame(loop);
+  }
+
+  function px(x, y, body, head, alertState) {
+    x = Math.round(x); y = Math.round(y);
+    ctx.fillStyle = "rgba(0,0,0,0.35)"; ctx.fillRect(x - 5, y + 4, 10, 3);
+    ctx.fillStyle = alertState ? P.guardAlert : body; ctx.fillRect(x - 4, y - 2, 8, 7);
+    ctx.fillStyle = head; ctx.fillRect(x - 3, y - 7, 6, 5);
+    ctx.fillStyle = "#111"; ctx.fillRect(x - 2, y - 5, 1, 1); ctx.fillRect(x + 1, y - 5, 1, 1);
+  }
+
+  function draw(l) {
+    var x, y, i;
+    for (y = 0; y < H; y++) {
+      for (x = 0; x < W; x++) {
+        var c = l.map[y].charAt(x);
+        ctx.fillStyle = (x + y) % 2 ? P.floor : P.floor2;
+        ctx.fillRect(x * T, y * T, T, T);
+        if (c === "#") {
+          ctx.fillStyle = P.wall; ctx.fillRect(x * T, y * T, T, T);
+          ctx.fillStyle = P.wallTop; ctx.fillRect(x * T, y * T, T, 3);
+        }
+        if (c === ",") {
+          ctx.fillStyle = P.grass; ctx.fillRect(x * T, y * T, T, T);
+          ctx.fillStyle = P.grass2;
+          for (i = 0; i < 4; i++) ctx.fillRect(x * T + 2 + i * 4, y * T + 3 + ((i * 5) % 7), 2, 6);
+        }
+        if (c === "E") {
+          ctx.fillStyle = chip ? P.exit : P.wallTop; ctx.fillRect(x * T + 2, y * T + 2, 12, 12);
+          ctx.fillStyle = P.wall; ctx.fillRect(x * T + 5, y * T + 5, 6, 6);
+        }
+        if (c === "K" && !chip) {
+          ctx.fillStyle = P.chip;
+          var b = Math.sin(t * 5) > 0 ? 1 : 0;
+          ctx.fillRect(x * T + 4, y * T + 5 - b, 8, 6);
+          ctx.fillStyle = P.wall; ctx.fillRect(x * T + 6, y * T + 7 - b, 4, 2);
+        }
+      }
+    }
+
+    guards.forEach(function (g) {
+      if (g.sleep > 0) {
+        var gx = Math.round(g.x), gy = Math.round(g.y);
+        ctx.fillStyle = "rgba(0,0,0,0.4)"; ctx.fillRect(gx - 7, gy + 3, 14, 3);
+        ctx.fillStyle = "#6e3a3a"; ctx.fillRect(gx - 5, gy - 1, 9, 5);
+        ctx.fillStyle = P.exit; ctx.font = "bold 9px monospace";
+        ctx.fillText("Zzz", gx - 5, gy - 6);
+        return;
+      }
+      ctx.fillStyle = (g.state === "chase" || seen > 0) ? P.coneAlert : P.cone;
+      ctx.beginPath();
+      ctx.moveTo(g.x, g.y);
+      var halfCone = g.coneAngle || 0.55;
+      for (var a = -halfCone; a <= halfCone; a += 0.05) {
+        var d = 0;
+        while (d < 80 && !solid(l, g.x + Math.cos(g.dir + a) * d, g.y + Math.sin(g.dir + a) * d)) d += 2;
+        ctx.lineTo(g.x + Math.cos(g.dir + a) * d, g.y + Math.sin(g.dir + a) * d);
+      }
+      ctx.closePath();
+      ctx.fill();
+      px(g.x, g.y, P.guard, "#1a1a1a", g.state === "chase");
+    });
+
+    ctx.fillStyle = P.chip;
+    darts.forEach(function (d) { ctx.fillRect(Math.round(d.x) - 1, Math.round(d.y) - 1, 3, 3); });
+
+    ctx.globalAlpha = hidden ? 0.45 : 1;
+    px(pl.x, pl.y, P.suit, P.player, false);
+    ctx.globalAlpha = 1;
+
+    if (seen > 0) {
+      ctx.fillStyle = "#ff4040"; ctx.font = "bold 12px monospace";
+      ctx.fillText("!", pl.x - 2, pl.y - 10);
+    }
+  }
+
+  function loop(now) {
+    if (phase !== "play") return;
+    var l = currentLevelData;
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    t += dt;
+
+    var dx = (keys["arrowright"] || keys["d"] ? 1 : 0) - (keys["arrowleft"] || keys["a"] ? 1 : 0);
+    var dy = (keys["arrowdown"] || keys["s"] ? 1 : 0) - (keys["arrowup"] || keys["w"] ? 1 : 0);
+    var crouch = !!(keys["shift"] || keys["c"]);
+    var sp = (crouch ? 30 : 55) * dt;
+    if (dx && dy) { dx *= 0.707; dy *= 0.707; }
+    var r = 5;
+    var nx = pl.x + dx * sp, ny = pl.y + dy * sp;
+    if (!solid(l, nx - r, pl.y - r) && !solid(l, nx + r, pl.y - r) && !solid(l, nx - r, pl.y + r) && !solid(l, nx + r, pl.y + r)) pl.x = nx;
+    if (!solid(l, pl.x - r, ny - r) && !solid(l, pl.x + r, ny - r) && !solid(l, pl.x - r, ny + r) && !solid(l, pl.x + r, ny + r)) pl.y = ny;
+
+    var tile = tileAt(l, pl.x, pl.y);
+    if (tile === "K" && !chip) { chip = true; updateHud(); }
+    if (tile === "E" && chip) { setPhase(levelIdx === TOTAL_LEVELS - 1 ? "end" : "won"); return; }
+    hidden = tile === "," && (crouch || (!dx && !dy));
+
+    if (cooldown > 0) cooldown -= dt;
+
+    for (var i = darts.length - 1; i >= 0; i--) {
+      var d = darts[i];
+      d.x += d.vx * dt; d.y += d.vy * dt; d.life -= dt;
+      var hit = null;
+      for (var j = 0; j < guards.length; j++) {
+        if (guards[j].sleep <= 0 && Math.hypot(guards[j].x - d.x, guards[j].y - d.y) < 7) { hit = guards[j]; break; }
+      }
+      if (hit) hit.sleep = l.sleepTime;
+      if (hit || d.life <= 0 || solid(l, d.x, d.y)) darts.splice(i, 1);
+    }
+
+    var spotted = false;
+    guards.forEach(function (g, i2) {
+      var path = l.guards[i2].path;
+      if (g.sleep > 0) { g.sleep -= dt; return; }
+
+      var ddx = pl.x - g.x, ddy = pl.y - g.y, dist = Math.hypot(ddx, ddy);
+      var a2 = Math.atan2(ddy, ddx) - g.dir;
+      a2 = Math.atan2(Math.sin(a2), Math.cos(a2));
+      var halfCone = g.coneAngle || 0.55;
+
+      var canSee = !hidden && ((dist < 85 && Math.abs(a2) < halfCone) || dist < 15) && lineClear(l, g.x, g.y, pl.x, pl.y);
+
+      if (canSee) {
+        spotted = true;
+        g.state = "chase";
+        g.investigateX = pl.x;
+        g.investigateY = pl.y;
+      }
+
+      // IA MEJORADA: Comportamiento de patrulla, investigación o persecución directa
+      if (g.state === "chase") {
+        // Persecución directa si el jugador está cerca o fue visto
+        var dd = Math.hypot(g.investigateX - g.x, g.investigateY - g.y);
+        if (dd < 4 || dist < 10) {
+          // Si llega al último punto donde lo vio, investiga el área circundante
+          g.state = "investigate";
+          g.pause = 2.5;
+        } else {
+          g.dir = Math.atan2(g.investigateY - g.y, g.investigateX - g.x);
+          var s = Math.min(dd, (g.speed * 1.3) * 20 * dt);
+          g.x += Math.cos(g.dir) * s;
+          g.y += Math.sin(g.dir) * s;
+        }
+      } else if (g.state === "investigate") {
+        g.dir += dt * 3; // Gira buscando al jugador
+        g.pause -= dt;
+        if (g.pause <= 0) {
+          g.state = "patrol"; // Regresa a patrullar si no encuentra nada
+        }
+      } else {
+        // Patrulla normal por waypoints
+        if (g.pause > 0) {
+          g.pause -= dt;
+        } else {
+          var tx = path[g.wp][0] * T + 8, ty = path[g.wp][1] * T + 8;
+          var dd2 = Math.hypot(tx - g.x, ty - g.y);
+          if (dd2 < 2) {
+            g.wp = (g.wp + 1) % path.length;
+            g.pause = 0.6;
+          } else {
+            var s2 = Math.min(dd2, g.speed * 20 * dt);
+            g.dir = Math.atan2(ty - g.y, tx - g.x);
+            g.x += ((tx - g.x) / dd2) * s2;
+            g.y += ((ty - g.y) / dd2) * s2;
+          }
+        }
+      }
+    });
+
+    seen = spotted ? seen + dt : Math.max(0, seen - dt);
+    if (seen > 0.35) { draw(l); setPhase("caught"); return; }
+    draw(l);
+    raf = requestAnimationFrame(loop);
+  }
+
+  window.addEventListener("keydown", function (e) {
+    keys[e.key.toLowerCase()] = true;
+    if (e.key.indexOf("Arrow") === 0) e.preventDefault();
+  });
+  window.addEventListener("keyup", function (e) { keys[e.key.toLowerCase()] = false; });
+
+  canvas.addEventListener("pointerdown", function (e) {
+    if (phase !== "play" || cooldown > 0) return;
+    var r = canvas.getBoundingClientRect();
+    var clickX = ((e.clientX - r.left) / r.width) * W * T;
+    var clickY = ((e.clientY - r.top) / r.height) * H * T;
+    var ang = Math.atan2(clickY - pl.y, clickX - pl.x);
+    darts.push({ x: pl.x, y: pl.y, vx: Math.cos(ang) * 220, vy: Math.sin(ang) * 220, life: 1 });
+    cooldown = 0.5;
+    e.preventDefault();
+  });
+
+  function bindBtn(id, key) {
+    var b = document.getElementById(id);
+    if (!b) return;
+    b.addEventListener("pointerdown", function(e) { e.preventDefault(); keys[key] = true; });
+    b.addEventListener("pointerup", function(e) { e.preventDefault(); keys[key] = false; });
+    b.addEventListener("pointerleave", function(e) { e.preventDefault(); keys[key] = false; });
+  }
+
+  bindBtn("btn-up", "arrowup");
+  bindBtn("btn-down", "arrowdown");
+  bindBtn("btn-left", "arrowleft");
+  bindBtn("btn-right", "arrowright");
+  bindBtn("btn-crouch", "c");
+
+  ovBtn.addEventListener("click", function () {
+    if (phase === "intro") setPhase("play");
+    else if (phase === "caught") setPhase("intro");
+    else if (phase === "won") { levelIdx += 1; setPhase("intro"); }
+    else if (phase === "end") { levelIdx = 0; setPhase("intro"); }
+  });
+
+  setPhase("intro");
+})();
+</script>
+</body>
+</html>

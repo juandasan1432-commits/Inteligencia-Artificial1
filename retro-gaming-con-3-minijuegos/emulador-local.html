@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RETRO GAMING · Emulador local</title>
+<style>
+:root{color-scheme:dark;--bg:#090914;--surface:#171725;--purple:#7928CA;--blue:#287BFF;--violet:#A855F7;--line:rgba(168,85,247,.25)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#ECEBFA;font-family:Rubik,'Segoe UI',Arial,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 20px}
+h1{font-family:'Chakra Petch',Arial,sans-serif;margin:0 0 6px}
+p{color:#A6A5C4}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}
+label{display:block;font-size:14px;color:#A6A5C4;margin:10px 0 6px}
+button{border:0;border-radius:999px;padding:12px 22px;font-weight:700;color:#fff;background:linear-gradient(90deg,var(--purple),var(--blue));cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+#msg{margin-top:12px;min-height:22px}
+.err{color:#ff9fb1}.ok{color:#9ff0c9}
+#game{width:100%;aspect-ratio:4/3;background:#000;border-radius:12px;overflow:hidden}
+kbd{background:#1f1f33;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Emulador PS1 (uso local)</h1>
+  <p>Funciona con archivos que tú aportas: tu propio juego y, si lo tienes, el BIOS de tu consola. Nada se sube a ningún servidor; el juego se lee desde tu equipo.</p>
+  <div class="panel">
+    <label for="rom">Juego (.chd, .pbp, .bin o .iso)</label>
+    <input type="file" id="rom" accept=".chd,.pbp,.bin,.iso,.img">
+    <label for="bios">BIOS (opcional, recomendado: scph5501.bin o equivalente de tu consola)</label>
+    <input type="file" id="bios" accept=".bin">
+    <div style="margin-top:14px"><button id="start" disabled>Iniciar juego</button></div>
+    <div id="msg" role="status"></div>
+  </div>
+  <div id="game"></div>
+  <p>Controles por defecto: flechas para mover, <kbd>Z</kbd> <kbd>X</kbd> <kbd>A</kbd> <kbd>S</kbd> como botones, <kbd>Enter</kbd> Start. Desde el menú del emulador puedes reasignar teclas, usar un mando USB o Bluetooth, activar pantalla completa, aplicar filtros y guardar o cargar partidas.</p>
+</div>
+<script>
+const MAX = 1024 * 1024 * 1024;
+const OK = ['chd', 'pbp', 'bin', 'iso', 'img'];
+const $ = id => document.getElementById(id);
+let rom = null, bios = null, started = false;
+const say = (t, c) => { $('msg').textContent = t; $('msg').className = c || ''; };
+function check(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!OK.includes(ext)) return 'Formato no compatible. Usa .chd, .pbp, .bin o .iso. Un .cue por sí solo no contiene el juego.';
+  if (file.size > MAX) return 'El archivo supera 1 GB: no corresponde a un disco de PS1.';
+  if (file.size < 1024 * 1024) return 'El archivo es demasiado pequeño para ser un disco de PS1.';
+  return '';
+}
+$('rom').addEventListener('change', e => {
+  rom = null; $('start').disabled = true;
+  const f = e.target.files[0]; if (!f) return;
+  const err = check(f); if (err) return say(err, 'err');
+  rom = f; $('start').disabled = started; say('Archivo listo: ' + f.name, 'ok');
+});
+$('bios').addEventListener('change', e => {
+  const f = e.target.files[0]; bios = null; if (!f) return;
+  if (f.size !== 512 * 1024) return say('Ese archivo no parece un BIOS de PS1 (deben pesar 512 KB).', 'err');
+  bios = f; say('BIOS listo.', 'ok');
+});
+$('start').addEventListener('click', () => {
+  if (!rom || started) return;
+  started = true; $('start').disabled = true; say('Cargando el emulador...');
+  window.EJS_player = '#game';
+  window.EJS_core = 'psx';
+  window.EJS_gameName = rom.name.replace(/\.[^.]+$/, '');
+  window.EJS_gameUrl = URL.createObjectURL(rom);
+  if (bios) window.EJS_biosUrl = URL.createObjectURL(bios);
+  window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+  window.EJS_startOnLoaded = true;
+  const s = document.createElement('script');
+  s.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+  s.onload = () => say('Emulador cargado.', 'ok');
+  s.onerror = () => { say('No se pudo descargar el emulador. Revisa tu conexión a internet.', 'err'); started = false; $('start').disabled = false; };
+  document.body.appendChild(s);
+});
+</script>
+</body>
+</html>

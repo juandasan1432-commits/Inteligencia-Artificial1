@@ -1,0 +1,303 @@
+PROYECTO: RETRO GAMING
+Sitio web estático sobre los clásicos de PlayStation 1. Proyecto de clase que se presenta en vivo y se despliega en GitHub Pages.
+
+══════════════════════════════════════
+0. REGLAS QUE NO SE NEGOCIAN
+══════════════════════════════════════
+- HTML, CSS y JavaScript puro. Sin frameworks, sin npm, sin build. Debe abrir con doble clic en index.html y funcionar igual en GitHub Pages.
+- Toda la persistencia va en localStorage, envuelta en try/catch. Si localStorage falla, el sitio sigue funcionando en modo solo lectura y lo avisa.
+- Único recurso externo: Google Fonts (Audiowide, Silkscreen y Rubik), con fuentes de respaldo.
+- Prohibido usar portadas, logos, capturas o personajes oficiales. Todo el arte es SVG original generado por código.
+- Prohibido incluir ROMs o BIOS.
+- Prohibido simular: cada botón hace algo real. Si algo no se puede en un sitio estático, no aparece en la interfaz y se explica en el README.
+- Prohibido inventar cifras: valoraciones, número de reseñas, popularidad y estadísticas salen solo de datos guardados. Si no hay datos, se muestra "Sin votos" o un estado vacío.
+- Todo texto que escriba un usuario se inserta escapado (función esc() para & < > " '). Nunca innerHTML con texto de usuario sin escapar.
+- Código comentado en español, legible, con funciones cortas. Tengo que poder explicarlo en clase.
+- Si algo de este documento no se puede cumplir, dilo antes de empezar en vez de simularlo.
+
+══════════════════════════════════════
+1. ESTRUCTURA DE ARCHIVOS
+══════════════════════════════════════
+index.html            → estructura, header, <main id="main">, footer, contenedor de toasts y de modales
+css/estilos.css       → todos los estilos
+js/datos.js           → catálogo semilla (sección 9) y lista de géneros
+js/portadas.js        → generador de portadas SVG (sección 5)
+js/app.js             → estado, almacenamiento, rutas, render y acciones
+emulador-local.html   → página aparte (sección 12)
+schema.sql            → modelo PostgreSQL para migración futura (sección 13)
+README.md             → sección 14
+
+══════════════════════════════════════
+2. IDENTIDAD VISUAL
+══════════════════════════════════════
+Estética synthwave de los 90 con interfaz moderna. Solo modo oscuro.
+
+Variables CSS en :root:
+--bg:#090914; --surface:#171725; --surface-2:#1f1f33;
+--purple:#7928CA; --blue:#287BFF; --violet:#A855F7; --white:#FFFFFF;
+--text:#ECEBFA; --muted:#A6A5C4; --line:rgba(168,85,247,.22);
+--danger:#FF5C7A; --ok:#3DDC97; --star:#FFC94D;
+--display:'Audiowide','Arial Black',Arial,sans-serif;   (títulos)
+--pixel:'Silkscreen',monospace;                          (etiquetas tipo consola)
+--body:'Rubik','Segoe UI',Arial,sans-serif;              (texto)
+--r-sm:8px; --r-md:14px; --r-lg:22px;
+
+- Botón principal: píldora con degradado horizontal de --purple a --blue, texto en --display, sombra violeta suave; al hacer hover sube 1px.
+- Botón secundario ("ghost"): fondo transparente y borde 1px --violet.
+- Foco visible en todo: outline 2px --blue con offset de 2px.
+- Contenedor .wrap: max-width 1240px, padding horizontal 20px.
+- Si el usuario tiene prefers-reduced-motion: reduce, todas las animaciones se desactivan.
+- Sin scroll horizontal en ningún ancho, desde 360px.
+
+══════════════════════════════════════
+3. LAYOUT GLOBAL
+══════════════════════════════════════
+HEADER (sticky, 68px de alto, fondo rgba(9,9,20,.92) con desenfoque y borde inferior --line):
+- Logo: un disco circular con conic-gradient azul, violeta y morado y un agujero central, más el texto "RETRO GAMING" en --display. Enlaza a #inicio.
+- Navegación: Inicio, Explorar, Categorías, Populares, Comunidad. "Admin" solo aparece en modo administrador. El enlace activo lleva aria-current="page" y fondo con degradado translúcido.
+- Buscador rápido: input tipo píldora con ícono de lupa. Al escribir (debounce de 250 ms) o al presionar Enter lleva a #explorar con ese texto ya aplicado.
+- Chip de perfil: muestra el avatar y el nombre de usuario, y enlaza a #perfil.
+- Por debajo de 980px la navegación se oculta y aparece un botón hamburguesa con aria-expanded.
+
+FOOTER: "RETRO GAMING — un archivo hecho por y para quienes crecieron con PlayStation 1." y, a la derecha, "Portadas: arte original generado. Las marcas mencionadas pertenecen a sus dueños."
+
+RUTAS por hash (sitio de una sola página): #inicio, #explorar, #categorias, #populares, #comunidad, #juego-<id>, #perfil, #admin. Un hash desconocido lleva a inicio. Cada cambio de vista hace scroll arriba y cierra el menú móvil.
+
+══════════════════════════════════════
+4. INICIO
+══════════════════════════════════════
+HERO (escena synthwave hecha solo con CSS y SVG, sin imágenes):
+- Fondo: cielo con degradado oscuro a violeta y campo de estrellas que titilan suavemente.
+- Sol synthwave: círculo con degradado de amarillo a magenta y franjas horizontales recortadas en la mitad inferior.
+- Montañas en silueta con borde neón violeta.
+- Piso con cuadrícula en perspectiva (CSS transform rotateX) que avanza en loop infinito.
+- Texto: arriba, "PRESS START · 1994-2006" en --pixel con un cursor que parpadea. Título en dos líneas: "REVIVE LA" en blanco y "ERA DORADA" con degradado violeta-azul en el texto. Subtítulo: "El archivo de PlayStation 1 hecho por su comunidad: fichas completas de los clásicos, reseñas de jugadores y tu propia biblioteca de nostalgia."
+- Botones: "EXPLORAR JUEGOS" (principal) lleva a #explorar. "DESCUBRIR MÁS" (ghost) hace scroll suave a la sección Museo.
+- A la derecha: un mazo de 3 tarjetas de los juegos destacados, apiladas con leve rotación, que rota solo cada 4 segundos y se pausa al pasar el mouse. Clic en la de arriba abre su ficha.
+- Por debajo de 860px: una sola columna, con un velo oscuro detrás del texto para que se lea sobre la escena.
+
+SECCIONES, en este orden. Cada una tiene título en --display, subtítulo en --muted, y un carrusel horizontal (scroll-snap) con botones ‹ › y enlace "Ver todo":
+1. Juegos destacados: juegos con featured = true.
+2. Museo: la consola que cambió todo. No es carrusel: son 4 bloques en fila (2x2 en móvil), cada uno con una cifra grande y un texto:
+   - "1994": Sale en Japón el 3 de diciembre. En 1995 llega a Norteamérica y Europa.
+   - "CD-ROM": Discos de hasta 650 MB frente a cartuchos de pocos megas: video, música real y mundos 3D.
+   - "+100 M": Unidades vendidas en su vida comercial. Fue la primera consola en superar esa cifra.
+   - "2006": Año en que terminó su fabricación, más de once años después de su lanzamiento.
+3. Espacio publicitario: solo se muestra si hay un anuncio activo (sección 11).
+4. Más populares: ranking por popularidad mayor que 0. "Ver todo" lleva a #populares.
+5. Últimos agregados: ordenados por addedAt de más nuevo a más viejo. "Ver todo" abre Explorar ya ordenado por año reciente.
+6. Recomendaciones: juegos del mismo género o la misma desarrolladora que mis favoritos, sin incluir los que ya son favoritos; primero los que coinciden en ambos, después por popularidad.
+7. Mejor valorados: juegos con al menos un voto, por promedio de estrellas. "Ver todo" abre Explorar ordenado por valoración.
+8. Categorías: tiles por género con el conteo de juegos ("1 juego" o "N juegos"). Cada tile lleva un círculo difuminado de degradado en la esquina. Clic abre Explorar filtrado por ese género.
+9. Clásicos imprescindibles: juegos con essential = true.
+Cuando una sección no tiene datos, muestra un estado vacío con borde punteado, un título, una explicación y, si aplica, un botón (ej.: "Todavía no hay actividad. Marca favoritos, califica y comenta: el ranking se arma con lo que hace la comunidad." + botón "Explorar juegos").
+
+══════════════════════════════════════
+5. TARJETAS Y PORTADAS
+══════════════════════════════════════
+ANATOMÍA DE LA TARJETA (relación de aspecto 3:4, radio --r-md):
+- Barra superior: "PS1" a la izquierda y el año a la derecha, en --pixel.
+- Género en MAYÚSCULAS en --pixel, de color --violet.
+- Título del juego en --display, encima de la portada, con máximo 2 líneas.
+- Portada SVG ocupando el resto de la tarjeta.
+- Debajo: la desarrolladora (cortada con ellipsis) a la izquierda y, a la derecha, el promedio con ★ o "Sin votos".
+- En el ranking, una insignia "#N" en la esquina.
+
+INTERACCIÓN:
+- Inclinación 3D que sigue al cursor, de máximo unos 8 grados, usando perspective y variables --rx y --ry calculadas en mousemove; vuelve a 0 en mouseleave.
+- Reflejo: radial-gradient blanco al 18% centrado en la posición del cursor (--mx, --my), visible solo en hover.
+- Barrido de scanline: una banda violeta translúcida que recorre la tarjeta de arriba a abajo en 1.1 s al entrar el cursor.
+- Entrada escalonada solo la primera vez que carga la sección: fade + translateY(22px), con 55 ms de retraso por tarjeta.
+
+PORTADAS (js/portadas.js): función portada(juego) que devuelve un SVG de viewBox 300x400.
+- Cada uno de los 23 juegos tiene una ESCENA PROPIA dibujada con formas simples. Representa el escenario o el ambiente del juego, nunca a sus personajes ni sus logos:
+  crash-bandicoot: isla tropical con palmeras y cajas de madera en un sendero
+  tekken-3: ring de torneo iluminado por reflectores
+  resident-evil-2: comisaría con faroles rotos y lluvia de noche
+  silent-hill: calle de pueblo con niebla espesa y postes de luz
+  metal-gear-solid: base nevada con torres de radar y reflector
+  gran-turismo-2: recta de circuito al atardecer con línea de meta
+  tony-hawks-pro-skater-2: skatepark con rampa half-pipe y grafitis abstractos
+  dino-crisis: base en la jungla con huellas gigantes y vallas rotas
+  final-fantasy-vii: ciudad industrial con reactores y brillo verde
+  spyro-the-dragon: islas flotantes con cristales y nubes
+  castlevania-symphony-of-the-night: castillo gótico bajo luna llena
+  crash-team-racing: pista de karts con curvas y conos
+  tomb-raider: entrada de tumba antigua con columnas y antorchas
+  medal-of-honor: trinchera con alambre de púas y cielo gris
+  command-and-conquer-red-alert: mapa táctico con radar y bases
+  final-fantasy-tactics: tablero isométrico de piedra con banderas
+  harvest-moon-back-to-nature: granja con establo, cultivos y sol
+  super-puzzle-fighter-ii-turbo: columnas de gemas de colores apiladas
+  ape-escape: jungla con red atrapamariposas y plátanos
+  street-fighter-alpha-3: escenario urbano con público en silueta
+  vagrant-story: ciudad medieval en ruinas al anochecer
+  chrono-cross: playa tropical con dos lunas
+  driver: calle de ciudad de noche con luces de neón y auto en silueta
+- Capa común a todas las portadas: degradado con los dos colores del juego (campo "colors"), scanlines CRT (líneas horizontales al 4% de opacidad), franja vertical oscura de 20px a la izquierda con "RETRO GAMING" rotado en --pixel, y una banda inferior oscura con el género y "año · desarrolladora".
+- Juegos nuevos agregados desde el admin: portada de respaldo según el género. Es el degradado de sus colores más un ícono del género (Acción: mira; Aventura: montañas; Terror: luna creciente; Carreras: bandera a cuadros; Deportes: balón; Lucha: estallido; RPG: cristal; Plataformas: bloques en escalera; Estrategia: hexágono; Simulación: engranaje; Puzzle: piezas tipo tetromino).
+- Cada SVG lleva role="img" y aria-label="Portada de <nombre>". Los ids de los degradados deben ser únicos por instancia para que no choquen entre tarjetas.
+
+══════════════════════════════════════
+6. EXPLORAR (#explorar)
+══════════════════════════════════════
+- Dos columnas: panel de filtros sticky de 260px a la izquierda y resultados a la derecha. En móvil, una sola columna.
+- Filtros: Nombre (input, debounce de 120 ms), Género, Año y Desarrolladora (selects que se llenan con los valores reales del catálogo, ordenados), y Ordenar por: Nombre A-Z, Nombre Z-A, Popularidad, Valoración, Año (más reciente), Año (más antiguo). Botón "Limpiar filtros".
+- Los filtros se combinan y los resultados cambian al instante, sin recargar.
+- Barra de resultados: "N resultados" y chips de los filtros activos; cada chip tiene ✕ para quitar ese filtro.
+- Grid de tarjetas con paginación de 12 por página. Botones numerados, con la página actual marcada con aria-current.
+- Sin resultados: estado vacío "Ningún juego coincide" con el botón "Limpiar filtros".
+- La búsqueda por nombre no distingue mayúsculas.
+
+══════════════════════════════════════
+7. FICHA DE JUEGO (#juego-<id>)
+══════════════════════════════════════
+- Dos columnas: portada de 300px con sombra violeta a la izquierda; a la derecha, nombre (h1), estrellas con "X.X de 5, N reseñas" o "Sin calificaciones todavía", e insignia "Imprescindible" si aplica.
+- Lista de datos (dl): Género, Año de lanzamiento, Desarrolladora, Distribuidora, Idiomas (solo si hay) y Favoritos (conteo real).
+- Descripción.
+- Acciones: botón de favorito con aria-pressed ("♡ Agregar a favoritos" / "♥ En favoritos"); select de biblioteca ("Agregar a mi biblioteca" / Pendiente / Jugando / Completado); en modo admin, "Editar ficha".
+- Reseñas, en dos paneles: a la izquierda el formulario, con 5 estrellas clicables (role="radiogroup"), textarea de máximo 1000 caracteres y botón "Publicar reseña" o "Actualizar reseña" (más "Eliminar" si ya existe); a la derecha la lista de reseñas.
+- Comentarios: textarea de máximo 500 caracteres y botón "Comentar". Lista con respuestas anidadas a un nivel (sangría con borde izquierdo); cada comentario tiene "Responder", "Eliminar" si es mío y "Reportar" si no lo es.
+- Juegos relacionados: carrusel de hasta 10 juegos del mismo género o desarrolladora.
+- Espacio publicitario entre la ficha y las reseñas, solo si hay un anuncio activo.
+- Al abrir la ficha se registra en el historial (sin duplicados, el más reciente primero, máximo 30).
+- Si el id no existe: estado vacío "Este juego no está en el catálogo" con el botón "Volver al catálogo".
+
+══════════════════════════════════════
+8. POPULARES, COMUNIDAD Y PERFIL
+══════════════════════════════════════
+POPULARIDAD = favoritos × 3 + reseñas × 2 + comentarios × 1. Explícalo en el subtítulo de #populares.
+#populares: lista de los 20 primeros con la posición (#1 a #3 en --violet), portada mini, nombre, "N favoritos, N reseñas, N comentarios" y estrellas.
+#comunidad: dos paneles, "Reseñas recientes" y "Comentarios recientes" (20 cada uno, del más nuevo al más viejo), con avatar, nombre, tiempo relativo ("hace 5 min", "hace 2 h", "hace 3 d") y enlace al juego.
+
+#perfil, con pestañas (role="tablist"):
+- Encabezado: avatar grande, nombre y "N favoritos, N reseñas, N comentarios".
+- Favoritos: grid de tarjetas.
+- Biblioteca: agrupada por Pendiente, Jugando y Completado, con conteo y botón "Quitar".
+- Historial: lista con "Visto hace…" y botón "Borrar historial", que pide confirmación.
+- Configuración:
+  - Avatar a elegir entre 🎮 👾 🕹️ 💿 🐉 🦊 🧟 🏎️ 🥷 🛹.
+  - Nombre de usuario de 3 a 20 caracteres (letras, números, espacio, punto, guion y guion bajo).
+  - Botón "Borrar todos mis datos", que pide confirmación.
+
+ANTI-SPAM: 12 segundos de espera entre publicaciones. Si alguien intenta publicar antes, toast "Espera N s antes de volver a publicar."
+
+══════════════════════════════════════
+9. CATÁLOGO SEMILLA (js/datos.js)
+══════════════════════════════════════
+Géneros: Acción, Aventura, Terror, Carreras, Deportes, Lucha, RPG, Plataformas, Estrategia, Simulación, Puzzle.
+Formato: id | nombre | género | año | desarrolladora | distribuidora | colores | destacado | imprescindible | descripción
+addedAt: escalonado 1 minuto entre juegos, en este orden.
+
+crash-bandicoot | Crash Bandicoot | Plataformas | 1996 | Naughty Dog | Sony Computer Entertainment | #F97316,#7928CA | sí | sí | Un marsupial con pantalones de mezclilla cruza islas, ruinas y fábricas para detener al Dr. Neo Cortex. Saltos precisos, cajas por romper y una cámara que corre detrás del personaje.
+tekken-3 | Tekken 3 | Lucha | 1998 | Namco | Namco | #DC2626,#287BFF | sí | sí | Torneo de artes marciales en 3D con movimiento lateral, combos fluidos y modos extra como Tekken Force. Para muchos, el mejor juego de pelea de la consola.
+resident-evil-2 | Resident Evil 2 | Terror | 1998 | Capcom | Capcom | #7F1D1D,#171725 | sí | sí | Leon y Claire llegan a Raccoon City en plena infección. Fondos prerenderizados, munición escasa y dos campañas que se cruzan entre sí.
+silent-hill | Silent Hill | Terror | 1999 | Konami (Team Silent) | Konami | #6B7280,#1F2937 | no | sí | Harry Mason busca a su hija en un pueblo cubierto de niebla. La niebla oculta los límites del motor y se convirtió en el sello del terror psicológico.
+metal-gear-solid | Metal Gear Solid | Acción | 1998 | Konami (KCEJ) | Konami | #065F46,#287BFF | sí | sí | Solid Snake se infiltra en Shadow Moses. Sigilo, narrativa cinematográfica con voces completas y jefes que rompen la cuarta pared.
+gran-turismo-2 | Gran Turismo 2 | Carreras | 1999 | Polyphony Digital | Sony Computer Entertainment | #1D4ED8,#A855F7 | no | no | Simulación de conducción con cientos de autos reales, licencias que superar y un modo carrera enorme repartido en dos discos.
+tony-hawks-pro-skater-2 | Tony Hawk's Pro Skater 2 | Deportes | 2000 | Neversoft | Activision | #EAB308,#7928CA | sí | no | Skate arcade con combos encadenados, manuals y un editor de parques. Su banda sonora marcó a toda una generación.
+dino-crisis | Dino Crisis | Terror | 1999 | Capcom | Capcom | #15803D,#7F1D1D | no | no | Regina investiga una base en una isla tomada por dinosaurios. Survival horror con escenarios en 3D y velocirraptores implacables.
+final-fantasy-vii | Final Fantasy VII | RPG | 1997 | Square | Square / Sony Computer Entertainment | #0EA5E9,#7928CA | sí | sí | Cloud y Avalanche contra Shinra en Midgar y más allá. Combate por turnos activos, materia y una historia que llevó el RPG japonés al mundo.
+spyro-the-dragon | Spyro the Dragon | Plataformas | 1998 | Insomniac Games | Sony Computer Entertainment | #9333EA,#F59E0B | no | no | Un pequeño dragón rescata a sus mayores convertidos en cristal. Mundos abiertos para planear, cargar con los cuernos y lanzar fuego.
+castlevania-symphony-of-the-night | Castlevania: Symphony of the Night | Aventura | 1997 | Konami | Konami | #4C1D95,#991B1B | no | sí | Alucard explora un castillo laberíntico que se revela poco a poco. Uno de los pilares del género que hoy llamamos metroidvania.
+crash-team-racing | Crash Team Racing | Carreras | 1999 | Naughty Dog | Sony Computer Entertainment | #F97316,#287BFF | no | no | Karts con el universo de Crash: derrapes con turbo, armas y un modo aventura para desbloquear pistas y personajes.
+tomb-raider | Tomb Raider | Aventura | 1996 | Core Design | Eidos Interactive | #B45309,#171725 | no | no | Lara Croft recorre tumbas de Perú, Grecia y Egipto en busca del Scion. Exploración 3D, saltos milimétricos y puzles ambientales.
+medal-of-honor | Medal of Honor | Acción | 1999 | DreamWorks Interactive | Electronic Arts | #57534E,#287BFF | no | no | Disparos en primera persona en la Segunda Guerra Mundial, con misiones de infiltración tras las líneas enemigas.
+command-and-conquer-red-alert | Command & Conquer: Red Alert | Estrategia | 1997 | Westwood Studios | Virgin Interactive | #B91C1C,#1E3A8A | no | no | Estrategia en tiempo real en una historia alternativa: Aliados contra Soviéticos, base, recursos y ejércitos.
+final-fantasy-tactics | Final Fantasy Tactics | Estrategia | 1997 | Square | Square / Sony Computer Entertainment | #92400E,#7928CA | no | no | Combates tácticos por turnos en cuadrícula isométrica, sistema de trabajos profundo y una trama de intriga política en Ivalice.
+harvest-moon-back-to-nature | Harvest Moon: Back to Nature | Simulación | 1999 | Victor Interactive Software | Natsume (Norteamérica) | #65A30D,#0EA5E9 | no | no | Heredas una granja abandonada: cultivas, cuidas animales y haces amistades en el pueblo, temporada tras temporada.
+super-puzzle-fighter-ii-turbo | Super Puzzle Fighter II Turbo | Puzzle | 1996 | Capcom | Capcom | #DB2777,#287BFF | no | no | Puzle competitivo con versiones chibi de personajes de Capcom. Combinas gemas y las rompes para enviar ataques al rival.
+ape-escape | Ape Escape | Plataformas | 1999 | SCE Japan Studio | Sony Computer Entertainment | #EAB308,#16A34A | no | no | Atrapa monos escapados a través del tiempo usando la red y gadgets. Fue el primer juego que exigía el mando con dos palancas analógicas.
+street-fighter-alpha-3 | Street Fighter Alpha 3 | Lucha | 1998 | Capcom | Capcom | #2563EB,#DC2626 | no | no | Lucha 2D con un plantel enorme, tres estilos de combate a elegir y un modo World Tour para personalizar a tu luchador.
+vagrant-story | Vagrant Story | RPG | 2000 | Square | Square | #78350F,#4C1D95 | no | no | Ashley Riot investiga la ciudad de Leá Monde. Combate en tiempo real con cadenas de golpes y un sistema de forja de armas muy detallado.
+chrono-cross | Chrono Cross | RPG | 1999 | Square | Square | #0891B2,#7928CA | no | no | Serge viaja entre dos mundos paralelos. Combate con elementos, decenas de personajes reclutables y una banda sonora memorable.
+driver | Driver | Carreras | 1999 | Reflections Interactive | GT Interactive | #CA8A04,#1F2937 | no | no | Un policía encubierto trabaja como conductor de escape. Persecuciones por ciudades abiertas inspiradas en el cine de los setenta.
+
+══════════════════════════════════════
+10. ALMACENAMIENTO (localStorage)
+══════════════════════════════════════
+Todas las claves llevan el prefijo "rg:".
+rg:catalogo   → objeto {id: juego}. Se crea con la semilla la primera vez; después manda el admin.
+rg:generos    → array de strings
+rg:perfil     → {alias, avatar}
+rg:favoritos  → array de ids
+rg:biblioteca → {id: "pendiente"|"jugando"|"completado"}
+rg:historial  → [{g: id, at: timestamp}] (máximo 30)
+rg:resenas    → {id: {r: 1-5, t: texto, at}}
+rg:comentarios→ {cid: {g: id, t: texto, p: cidPadre|null, at}}
+rg:reportes   → {rid: {tipo, clave, motivo, at}}
+rg:anuncios   → {aid: {titulo, texto, url, cta, activo, at}}
+rg:admin      → "1" cuando el modo admin está activo
+Toda lectura valida el tipo de dato; si está corrupta, usa el valor por defecto.
+
+══════════════════════════════════════
+11. PANEL DE ADMINISTRACIÓN (#admin)
+══════════════════════════════════════
+- Se activa abriendo la página con ?admin=1, que guarda rg:admin, y se desactiva con ?admin=0. Si alguien entra a #admin sin activarlo: "Modo administrador desactivado. Abre la página agregando ?admin=1 a la URL (por ejemplo index.html?admin=1). Queda activo en este navegador hasta que uses ?admin=0."
+- Pestañas:
+  - Juegos: tabla con Juego, Género, Año, Estado (insignias Destacado / Imprescindible) y acciones Editar / Eliminar (con confirmación). Botón "Agregar juego".
+  - Categorías: agregar (3 a 24 caracteres, sin duplicados) y eliminar solo las que no están en uso.
+  - Moderación: lista de reportes con el contenido reportado, el motivo y las acciones "Borrar contenido" y "Descartar reporte".
+  - Anuncios: crear, editar, pausar/activar y eliminar. Campos: título (máx. 60), texto (máx. 120), URL (obligatorio https://) y texto del botón.
+  - Estadísticas: tarjetas con Juegos, Reseñas, Comentarios, Favoritos, Aportes en 7 días, Reportes pendientes y Anuncios activos, más el Top 5 por popularidad.
+- Formulario de juego, en un modal:
+  - nombre (2 a 80 caracteres), descripción (20 a 800), género (select), año (1994 a 2006), desarrolladora, distribuidora, idiomas (separados por coma), dos selectores de color para la portada, y casillas Destacado e Imprescindible.
+  - El id se genera del nombre (minúsculas, sin tildes, con guiones). Si ya existe: "Ya existe un juego con ese nombre."
+  - Los errores se muestran dentro del modal.
+- Motivos para reportar: Spam o publicidad, Lenguaje ofensivo, Acoso, Spoilers sin aviso, Contenido ilegal o piratería, Otro.
+- Los anuncios solo aparecen en los espacios fijos de inicio y de la ficha, con la etiqueta "Publicidad", y nunca encima de otro contenido. El enlace lleva rel="noopener sponsored".
+
+══════════════════════════════════════
+12. EXPERIENCIA Y COMPONENTES COMUNES
+══════════════════════════════════════
+- Toasts abajo a la derecha (aria-live="polite"): éxito con borde --ok (3.5 s), error con borde --danger (6 s).
+- Modales con role="dialog", aria-modal, cierre con Esc y clic fuera, y el foco devuelto al elemento que los abrió.
+- Confirmación propia (no confirm() del navegador) antes de cualquier borrado.
+- Skeletons animados mientras se arma la vista.
+- Los inputs conservan el texto y el foco cuando una región se vuelve a pintar.
+
+emulador-local.html (página aparte; NO se enlaza desde el menú):
+- Usa EmulatorJS desde su CDN (core "psx"). El usuario elige su archivo de juego (.chd, .pbp, .bin, .iso o .img, entre 1 MB y 1 GB) y, opcionalmente, su BIOS (.bin de exactamente 512 KB). Se validan antes de cargar.
+- Mensajes de error claros, y una explicación de los controles por defecto y de que nada se sube a ningún servidor.
+
+══════════════════════════════════════
+13. schema.sql
+══════════════════════════════════════
+Modelo PostgreSQL para una futura migración a Supabase. NO se conecta en esta versión.
+- Tablas: profiles (con rol user/moderator/admin y banned_at), genres, games, screenshots, favorites, reviews, comments (con parent_id), library, history, save_states, reports y ads, con sus llaves foráneas y restricciones CHECK.
+- Una vista game_stats con la misma fórmula de popularidad.
+- Políticas RLS: todos leen el catálogo y la comunidad; cada usuario escribe solo lo suyo; solo el admin gestiona el catálogo, los anuncios y los reportes; biblioteca, historial y partidas son privados.
+
+══════════════════════════════════════
+14. README.md
+══════════════════════════════════════
+- Cómo abrirlo (doble clic) y cómo activar el admin.
+- Cómo desplegar en GitHub Pages: Settings → Pages → main / root.
+- Limitaciones, dichas sin rodeos: los datos viven en el navegador de cada persona; la comunidad no es compartida (lo que yo escribo no lo ve otro visitante); el admin no tiene seguridad (es una demo); no se suben imágenes.
+- Qué haría falta para tener usuarios reales: Supabase con schema.sql, Auth y almacenamiento.
+- Aviso legal: no se distribuyen ROMs ni BIOS, y las portadas son arte original.
+
+══════════════════════════════════════
+15. ORDEN DE TRABAJO Y VERIFICACIÓN
+══════════════════════════════════════
+Construye en este orden y comprueba cada etapa antes de seguir:
+1) estilos base, header, footer y rutas;
+2) hero y secciones de inicio;
+3) portadas;
+4) catálogo y ficha;
+5) Explorar;
+6) favoritos, biblioteca e historial;
+7) reseñas, comentarios y reportes;
+8) admin;
+9) responsive y pulido.
+
+Antes de entregar, verifica a 390px y a 1280px:
+- que cada ruta cargue;
+- que los filtros se combinen y la paginación funcione;
+- que favoritos, biblioteca, reseñas y comentarios persistan después de recargar;
+- que la espera de 12 s funcione;
+- que agregar, editar y eliminar juegos funcione;
+- que un comentario con <b>html</b> se vea como texto;
+- que no haya scroll horizontal;
+- que la consola no muestre errores.
+Al final, entrega la lista de archivos y un resumen de qué verificaste.

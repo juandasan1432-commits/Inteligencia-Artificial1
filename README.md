@@ -4,4 +4,4 @@ Repositorio de IA -- Juan David Henao Jaramillo -- Tesla
 
 2. Archivo generado actividad practica -- Riwi tres cupos borrador txt
 
-3. Pagina creada con IA, icluido su prompt. --- retro-gaming-con-3-minijuegos
+3. Pagina creada con IA, icluido su prompt. --- retro-gaming-con-3-minijuegos --- EQUIPO Juan Tejada, Duban y Ronaldo

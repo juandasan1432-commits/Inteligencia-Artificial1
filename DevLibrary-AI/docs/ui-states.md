@@ -24,7 +24,7 @@ Usa **Estados** en el encabezado para explorar los ejemplos de interfaz y **Chat
 
 ## Estados del chat
 
-- **Pensando.** Al enviar una consulta, el chat muestra un indicador y deja el envío en pausa hasta que termina la búsqueda. El indicador permanece visible brevemente mientras se consulta la biblioteca local.
+- **Pensando.** Al enviar una consulta, el chat muestra un indicador durante al menos cinco segundos y deja el envío en pausa hasta que presenta el resultado de la búsqueda local.
 - **Respuesta.** El resultado reemplaza el indicador y presenta la ficha y sus referencias.
 - **Sin respuesta.** Cuando la búsqueda queda sin coincidencias, el chat muestra un error y propone reformular la consulta. Si encuentra varias fichas igual de relevantes, muestra un aviso para pedir más precisión.
 - **Error al procesar la consulta.** Si falla la búsqueda, el chat muestra un mensaje y ofrece volver a intentar la misma consulta.

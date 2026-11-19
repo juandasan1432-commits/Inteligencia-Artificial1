@@ -5,7 +5,7 @@ const statusLine = document.querySelector('#estado-consulta');
 const connectionNotice = document.querySelector('#estado-conexion');
 const sendButton = composer.querySelector('button[type="submit"]');
 const suggestions = [...document.querySelectorAll('button[data-question]')];
-const thinkingDelay = 500;
+const thinkingDelay = 5_000;
 let previousAnswer;
 let pendingTimer;
 

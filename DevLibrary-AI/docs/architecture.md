@@ -37,7 +37,7 @@ DevLibrary AI es una biblioteca conversacional en HTML, CSS y JavaScript. La por
 - La hoja compartida centraliza la paleta oscura, tipografía, espaciado y dimensiones en propiedades CSS. Grid organiza las regiones y tarjetas. Flexbox alinea grupos de controles y elementos de navegación. La tipografía de sistema y los iconos locales reducen solicitudes externas.
 - En pantallas estrechas el contenido se reordena en una columna. En anchos mayores la navegación lateral deja espacio para una columna de lectura acotada. Los mensajes se adaptan al ancho disponible y el código largo se desplaza dentro de su bloque.
 - El diseño ofrece foco visible, contraste, etiquetas y navegación por teclado. El historial usa `role="log"` y el foco vuelve al compositor tras el envío. `prefers-reduced-motion` permite reducir las animaciones de la galería.
-- El desplegable «Proyecto y privacidad» de `index.html#proyecto` explica el tratamiento de las consultas y los enlaces externos. Las consultas se procesan en el navegador y se conservan en la página. Al abrir documentación externa, se aplican las condiciones del sitio de destino.
+- El desplegable «Proyecto y privacidad» de `index.html#proyecto` explica el tratamiento de las consultas. Las preguntas se procesan en el navegador y se conservan en la página. Antes de mostrar una respuesta, el chat confirma la conexión mediante una solicitud `HEAD` al sitio sin transmitir la consulta. Al abrir una copia desde el disco, el chat usa el estado de red del navegador.
 
 ## Contrato propuesto para la integración
 

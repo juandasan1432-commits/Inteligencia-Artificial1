@@ -8,7 +8,7 @@ Biblioteca conversacional en español sobre programación y ciberseguridad defen
 2. Escribe una consulta y pulsa **Enter** o **Enviar consulta**. También puedes hacer clic en cualquiera de las cuatro preguntas sugeridas para enviarla al chat.
 3. En **Biblioteca** puedes explorar los temas y sus referencias. En **Estados** puedes recorrer ejemplos de interfaz.
 
-El chat busca fichas en el navegador y muestra explicaciones, ejemplos y referencias. Si una consulta queda fuera de la cobertura de las fichas, avisa y sugiere reformularla. Los enlaces a documentación externa requieren conexión.
+El chat requiere conexión para responder. Busca fichas en el navegador y muestra explicaciones, ejemplos y referencias. Si pierde la conexión, muestra un error con un código y permite volver a intentar la consulta.
 
 ## Archivos
 

@@ -28,5 +28,6 @@ Usa **Estados** en el encabezado para explorar los ejemplos de interfaz y **Chat
 - **Respuesta.** El resultado reemplaza el indicador y presenta la ficha y sus referencias.
 - **Sin respuesta.** Cuando la búsqueda queda sin coincidencias, el chat muestra un error y propone reformular la consulta. Si encuentra varias fichas igual de relevantes, muestra un aviso para pedir más precisión.
 - **Error al procesar la consulta.** Si falla la búsqueda, el chat muestra un mensaje y ofrece volver a intentar la misma consulta.
-- **Sin conexión.** Si el navegador detecta que perdió la conexión, aparece un aviso junto al compositor. Las fichas ya cargadas siguen disponibles. El aviso desaparece cuando el navegador vuelve a detectar conexión.
+- **Sin conexión.** Si el navegador detecta que el dispositivo está sin internet, el chat cancela la búsqueda pendiente o rechaza la consulta nueva con `ERR_INTERNET_DISCONNECTED`. El mensaje incluye los pasos para reconectarse y volver a intentar la misma consulta.
+- **Fallo al contactar el sitio.** Antes de responder, el chat hace una solicitud `HEAD` al sitio sin incluir la pregunta. Muestra `ERR_NETWORK_UNREACHABLE` si no recibe una respuesta HTTP, `ERR_CONNECTION_TIMEOUT` si supera los cuatro segundos, o `ERR_HTTP_RESPONSE` junto con el estado HTTP real que devuelve el sitio.
 - **Consulta inválida.** Una entrada vacía o que excede el límite se señala en el compositor antes de iniciar la búsqueda.

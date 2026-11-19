@@ -6,8 +6,15 @@ const connectionNotice = document.querySelector('#estado-conexion');
 const sendButton = composer.querySelector('button[type="submit"]');
 const suggestions = [...document.querySelectorAll('button[data-question]')];
 const thinkingDelay = 5_000;
+const connectionTimeout = 4_000;
+const offlineError = {
+  title: 'Sin conexión a internet',
+  code: 'ERR_INTERNET_DISCONNECTED',
+  summary: 'El navegador detectó que el dispositivo está sin internet. Tu consulta quedó en el chat y no se recibió una respuesta HTTP.',
+  help: 'Comprueba que el Wi-Fi o los datos móviles estén activos. Cuando recuperes la conexión, pulsa «Volver a intentar».',
+};
 let previousAnswer;
-let pendingTimer;
+let activeRequest;
 
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -84,39 +91,121 @@ function clearValidation() {
   input.removeAttribute('aria-invalid');
 }
 
-function completeQuestion(question, pending) {
-  pendingTimer = undefined;
+function renderError(question, error) {
+  const response = message('DevLibrary AI · Biblioteca', 'assistant');
+  const feedback = addFeedback(response, error.title, error.summary, 'error');
+  const detail = element('p');
+  detail.append('Código de error ', element('code', error.code));
+  if (error.http) detail.append(` · HTTP ${error.http}`);
+  feedback.append(detail, element('p', error.help));
+  const retry = element('button', 'Volver a intentar', 'chat__retry');
+  retry.type = 'button';
+  retry.addEventListener('click', () => submitQuestion(question));
+  feedback.append(retry);
+  return response;
+}
+
+async function checkConnection(controller) {
+  if (!navigator.onLine) return offlineError;
+  // Una copia abierta desde el disco solo dispone del estado de red del navegador.
+  if (location.protocol === 'file:') return null;
+
+  const timeout = window.setTimeout(() => controller.abort(), connectionTimeout);
+  try {
+    const response = await fetch('js/chat.js', {
+      method: 'HEAD',
+      cache: 'no-store',
+      credentials: 'omit',
+      redirect: 'error',
+      signal: controller.signal,
+    });
+    if (response.ok) return null;
+    return {
+      title: 'Error de conexión con el sitio',
+      code: 'ERR_HTTP_RESPONSE',
+      http: response.status,
+      summary: 'El sitio respondió con un estado HTTP de error al comprobar la conexión.',
+      help: 'Espera unos instantes y vuelve a intentar la consulta.',
+    };
+  } catch {
+    if (!navigator.onLine) return offlineError;
+    return controller.signal.aborted ? {
+      title: 'Se agotó el tiempo de conexión',
+      code: 'ERR_CONNECTION_TIMEOUT',
+      summary: 'El sitio no respondió en cuatro segundos. No se completó tu consulta.',
+      help: 'Comprueba la conexión y vuelve a intentar la consulta.',
+    } : {
+      title: 'No se pudo conectar con el sitio',
+      code: 'ERR_NETWORK_UNREACHABLE',
+      summary: 'El navegador no recibió una respuesta HTTP. No se completó tu consulta.',
+      help: 'Comprueba que puedes abrir otras páginas y vuelve a intentar la consulta.',
+    };
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+
+function stopRequest() {
+  if (!activeRequest) return;
+  const request = activeRequest;
+  activeRequest = undefined;
+  window.clearTimeout(request.timer);
+  request.controller.abort();
+}
+
+function finishRequest(request, response) {
+  stopRequest();
+  request.pending.replaceWith(response);
+  showInHistory(response);
+  setThinking(false);
+}
+
+async function completeQuestion(request) {
+  const connectionError = await checkConnection(request.controller);
+  if (request !== activeRequest) return;
+  const { question } = request;
+  const error = navigator.onLine ? connectionError : offlineError;
+  if (error) {
+    finishRequest(request, renderError(question, error));
+    return;
+  }
   let response;
   try {
     const answer = matchQuery(question, previousAnswer);
     response = renderAnswer(answer);
     if (answer.sources) previousAnswer = answer;
   } catch {
-    response = message('DevLibrary AI · Biblioteca', 'assistant');
-    const feedback = addFeedback(response, 'Error al procesar la consulta', 'Ocurrió un problema al buscar la respuesta.', 'error');
-    const retry = element('button', 'Volver a intentar', 'chat__retry');
-    retry.type = 'button';
-    retry.addEventListener('click', () => submitQuestion(question));
-    feedback.append(retry);
+    response = renderError(question, {
+      title: 'Error al procesar la consulta',
+      code: 'ERR_CHAT_SEARCH',
+      summary: 'Ocurrió un problema al buscar la respuesta.',
+      help: 'Vuelve a intentar la consulta.',
+    });
   }
-  pending.replaceWith(response);
-  showInHistory(response);
-  setThinking(false);
+  finishRequest(request, response);
 }
 
 function submitQuestion(question) {
-  if (pendingTimer !== undefined) return;
+  if (activeRequest) return;
   const user = message('Tú', 'user');
   user.append(element('p', question));
-  const pending = element('div', '', 'status-box status-box--loading chat__pending');
-  pending.append(element('strong', 'Pensando…'), element('p', 'Buscando una respuesta en la biblioteca.'));
   historyLog.hidden = false;
-  historyLog.append(user, pending);
-  showInHistory(user);
+  if (navigator.onLine) {
+    const pending = element('div', '', 'status-box status-box--loading chat__pending');
+    pending.append(element('strong', 'Pensando…'), element('p', 'Buscando una respuesta en la biblioteca.'));
+    historyLog.append(user, pending);
+    showInHistory(pending);
+    const request = { question, pending, controller: new AbortController() };
+    activeRequest = request;
+    request.timer = window.setTimeout(() => completeQuestion(request), thinkingDelay);
+    setThinking(true);
+  } else {
+    const response = renderError(question, offlineError);
+    historyLog.append(user, response);
+    showInHistory(response);
+  }
   clearValidation();
   input.focus({ preventScroll: true });
-  setThinking(true);
-  pendingTimer = window.setTimeout(() => completeQuestion(question, pending), thinkingDelay);
   const box = composer.getBoundingClientRect();
   if (box.bottom > window.innerHeight || box.top < 0) {
     composer.scrollIntoView({ block: 'nearest' });
@@ -125,7 +214,7 @@ function submitQuestion(question) {
 
 composer.addEventListener('submit', event => {
   event.preventDefault();
-  if (pendingTimer !== undefined) return;
+  if (activeRequest) return;
   const question = input.value.trim();
   if (!question || question.length > input.maxLength) {
     statusLine.textContent = question
@@ -153,8 +242,7 @@ suggestions.forEach(button => {
 
 document.querySelector('.sidebar__new').addEventListener('click', event => {
   event.preventDefault();
-  window.clearTimeout(pendingTimer);
-  pendingTimer = undefined;
+  stopRequest();
   historyLog.replaceChildren();
   historyLog.hidden = true;
   previousAnswer = undefined;
@@ -167,7 +255,10 @@ document.querySelector('.sidebar__new').addEventListener('click', event => {
 function updateConnection() {
   connectionNotice.textContent = navigator.onLine
     ? ''
-    : 'Sin conexión a internet. Puedes seguir consultando las fichas cargadas. Los enlaces externos requieren conexión.';
+    : 'Sin conexión a internet. Restablece la conexión para que el chat pueda responder.';
+  if (!navigator.onLine && activeRequest) {
+    finishRequest(activeRequest, renderError(activeRequest.question, offlineError));
+  }
 }
 
 window.addEventListener('online', updateConnection);

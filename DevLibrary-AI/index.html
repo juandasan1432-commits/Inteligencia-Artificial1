@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Maqueta de DevLibrary AI, una biblioteca conversacional de programación y ciberseguridad.">
+  <title>DevLibrary AI · Biblioteca técnica</title>
+  <link rel="icon" href="assets/icons/brand.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="workspace">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="workspace-header">
+    <a class="brand" href="index.html">
+      <img src="assets/icons/brand.svg" width="36" height="36" alt="">
+      <span>DevLibrary <span class="brand__accent">AI</span></span>
+    </a>
+    <nav class="workspace-header__nav" aria-label="Navegación principal">
+      <a href="index.html" aria-current="page">Chat</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="estados.html">Estados</a>
+    </nav>
+    <span class="mode">Maqueta estática</span>
+  </header>
+
+  <aside class="sidebar" aria-label="Biblioteca y conversaciones">
+    <nav class="sidebar__nav" aria-label="Accesos a conversación y documentación">
+      <a class="sidebar__new" href="#consulta" aria-describedby="ayuda-consulta">
+        <img src="assets/icons/plus.svg" width="16" height="16" alt=""> Nueva conversación
+      </a>
+
+      <section class="sidebar__section" aria-labelledby="historial">
+        <h2 id="historial">Historial de ejemplo</h2>
+        <ul>
+          <li><a href="estados.html#muestra"><img src="assets/icons/clock.svg" width="16" height="16" alt=""> Funciones en Python</a></li>
+          <li><a href="estados.html#extensa"><img src="assets/icons/clock.svg" width="16" height="16" alt=""> Conversación extensa</a></li>
+        </ul>
+      </section>
+
+      <section class="sidebar__section" aria-labelledby="biblioteca">
+        <h2 id="biblioteca">Biblioteca</h2>
+        <ul>
+          <li><a href="biblioteca.html"><img src="assets/icons/book.svg" width="16" height="16" alt=""> Explorar lenguajes</a></li>
+          <li><a href="biblioteca.html#web"><img src="assets/icons/code.svg" width="16" height="16" alt=""> Desarrollo web</a></li>
+          <li><a href="biblioteca.html#backend"><img src="assets/icons/terminal.svg" width="16" height="16" alt=""> Lenguajes y backend</a></li>
+          <li><a href="biblioteca.html#datos"><img src="assets/icons/database.svg" width="16" height="16" alt=""> Bases de datos</a></li>
+          <li><a href="biblioteca.html#herramientas"><img src="assets/icons/tools.svg" width="16" height="16" alt=""> Herramientas y prácticas</a></li>
+          <li><a href="biblioteca.html#seguridad"><img src="assets/icons/shield.svg" width="16" height="16" alt=""> Ciberseguridad</a></li>
+        </ul>
+      </section>
+
+      <a class="sidebar__about" href="#proyecto"><img src="assets/icons/info.svg" width="16" height="16" alt=""> Acerca del proyecto</a>
+    </nav>
+  </aside>
+
+  <main id="contenido" class="chat" tabindex="-1">
+    <div class="chat__inner">
+      <section class="welcome" aria-labelledby="bienvenida">
+        <div class="welcome__emblem">
+          <img src="assets/icons/brand.svg" width="68" height="68" alt="">
+        </div>
+        <h1 id="bienvenida">Tu biblioteca técnica</h1>
+        <p class="welcome__description">Estás conversando con DevLibrary AI, un asistente de inteligencia artificial especializado en programación y ciberseguridad.</p>
+      </section>
+
+      <section class="suggestions" aria-labelledby="sugerencias">
+        <h2 id="sugerencias">Explora una pregunta de ejemplo</h2>
+        <ul class="suggestions__grid">
+          <li><a class="suggestion" href="biblioteca.html#javascript-typescript">
+            <span class="suggestion__icon suggestion__icon--web"><img src="assets/icons/code.svg" width="16" height="16" alt=""></span>
+            <span><strong>JavaScript y TypeScript</strong><span>¿En qué se diferencian?</span></span>
+            <img class="suggestion__arrow" src="assets/icons/arrow.svg" width="16" height="16" alt="">
+          </a></li>
+          <li><a class="suggestion" href="estados.html#muestra">
+            <span class="suggestion__icon suggestion__icon--python"><img src="assets/icons/terminal.svg" width="16" height="16" alt=""></span>
+            <span><strong>Funciones en Python</strong><span>¿Cómo se definen y se usan?</span></span>
+            <img class="suggestion__arrow" src="assets/icons/arrow.svg" width="16" height="16" alt="">
+          </a></li>
+          <li><a class="suggestion" href="biblioteca.html#seguridad-web">
+            <span class="suggestion__icon suggestion__icon--security"><img src="assets/icons/shield.svg" width="16" height="16" alt=""></span>
+            <span><strong>Prevención de XSS</strong><span>¿Qué protege a una aplicación?</span></span>
+            <img class="suggestion__arrow" src="assets/icons/arrow.svg" width="16" height="16" alt="">
+          </a></li>
+          <li><a class="suggestion" href="biblioteca.html#cpp">
+            <span class="suggestion__icon suggestion__icon--data"><img src="assets/icons/database.svg" width="16" height="16" alt=""></span>
+            <span><strong>Listas enlazadas en C++</strong><span>¿Cómo se organiza cada nodo?</span></span>
+            <img class="suggestion__arrow" src="assets/icons/arrow.svg" width="16" height="16" alt="">
+          </a></li>
+        </ul>
+      </section>
+
+      <form class="chat__composer">
+        <label for="consulta">Tu consulta técnica</label>
+        <div class="chat__input">
+          <textarea id="consulta" rows="2" maxlength="3000" placeholder="Escribe una pregunta de programación…" aria-describedby="ayuda-consulta"></textarea>
+          <button type="button" disabled>
+            <img src="assets/icons/send.svg" width="18" height="18" alt="">
+            <span class="visually-hidden">Enviar consulta</span>
+          </button>
+        </div>
+        <p id="ayuda-consulta" class="chat__hint">Las consultas se pueden escribir en esta maqueta. El envío está deshabilitado.</p>
+      </form>
+    </div>
+
+    <footer class="workspace-footer">
+      <p>DevLibrary AI utiliza inteligencia artificial y puede cometer errores. Verifica la información importante y consulta las fuentes oficiales.</p>
+      <details class="project-info">
+        <summary>Proyecto y privacidad</summary>
+        <p id="proyecto" tabindex="-1">Prototipo para consultar documentación y aprender con ejemplos. La maqueta no transmite ni guarda lo que escribes. Los enlaces de la biblioteca llevan a sitios externos con sus propias políticas.</p>
+        <p><a href="biblioteca.html">Documentación oficial</a> · <a href="estados.html">Estados de la maqueta</a></p>
+      </details>
+    </footer>
+  </main>
+</body>
+</html>

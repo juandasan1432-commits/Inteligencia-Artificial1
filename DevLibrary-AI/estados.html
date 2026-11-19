@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estados del chat | DevLibrary AI</title>
+  <link rel="icon" href="assets/icons/brand.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="subpage">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="sub-header">
+    <div class="sub-header__inner">
+      <a class="brand" href="index.html">
+        <img src="assets/icons/brand.svg" alt="" width="28" height="28">
+        <span>DevLibrary <span class="brand__accent">AI</span></span>
+      </a>
+      <nav class="sub-nav" aria-label="Navegación principal">
+        <a href="index.html">Chat</a>
+        <a href="biblioteca.html">Biblioteca</a>
+        <a href="estados.html" aria-current="page">Estados</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page" id="contenido" tabindex="-1">
+    <header class="page-intro">
+      <p class="eyebrow">Vista previa</p>
+      <h1>Estados del chat</h1>
+      <p>Estás conversando con DevLibrary AI, un asistente de inteligencia artificial especializado en programación y ciberseguridad.</p>
+      <p><strong>Maqueta estática.</strong> Los mensajes son ejemplos y el texto que escribas aquí se queda en el campo.</p>
+    </header>
+
+    <nav class="section-nav" aria-label="Estados de la conversación">
+      <ul>
+        <li><a href="index.html">Inicio sin mensajes</a></li>
+        <li><a href="#muestra">Respuesta</a></li>
+        <li><a href="#carga">Carga</a></li>
+        <li><a href="#error">Errores</a></li>
+        <li><a href="#sin-resultados">Sin referencias</a></li>
+        <li><a href="#entrada-vacia">Entrada vacía</a></li>
+        <li><a href="#extensa">Historial largo</a></li>
+        <li><a href="#fuentes">Fuentes</a></li>
+        <li><a href="#fuera-de-tema">Fuera de tema</a></li>
+      </ul>
+    </nav>
+
+    <section class="state" id="muestra">
+      <h2>Respuesta educativa</h2>
+      <div class="chat__messages">
+        <article class="chat__message chat__message--user">
+          <p class="state__label">Tú</p>
+          <p>¿Cómo funcionan las funciones en Python?</p>
+        </article>
+        <article class="chat__message chat__message--assistant">
+          <p class="state__label">DevLibrary AI · Ejemplo con documentación</p>
+          <h3>Funciones en Python</h3>
+          <p>Una función es un objeto invocable. Puedes definirla con <code>def</code>, declarar los parámetros que recibe y entregar un resultado con <code>return</code>.</p>
+          <p>Piensa en una receta que puedes usar varias veces. Le das los ingredientes de cada ocasión y obtienes el resultado sin repetir los pasos en cada llamada.</p>
+          <h4>Ejemplo en Python 3</h4>
+          <p>Calcula las páginas que te faltan por leer. El ejemplo puede ejecutarse con Python 3 y usa solo funciones incorporadas.</p>
+          <pre class="code-block" tabindex="0"><code>def paginas_pendientes(total, leidas):
+    return total - leidas
+
+pendientes = paginas_pendientes(180, 65)
+print(pendientes)  # 115</code></pre>
+          <h4>Cómo funciona</h4>
+          <ol>
+            <li><code>def</code> define <code>paginas_pendientes</code> con los parámetros <code>total</code> y <code>leidas</code>.</li>
+            <li>La llamada asigna los argumentos <code>180</code> y <code>65</code> a esos parámetros en ese orden.</li>
+            <li><code>return</code> entrega <code>115</code>. El programa guarda el resultado en <code>pendientes</code> y <code>print</code> lo muestra.</li>
+          </ol>
+          <h4>Buenas prácticas</h4>
+          <p>Usa nombres que describan la tarea y mantén el cálculo separado de la presentación. En una aplicación real valida que el total y las páginas leídas sean enteros y que las páginas leídas estén entre cero y el total.</p>
+          <aside class="chat__sources">
+            <h4>Fuentes consultadas</h4>
+            <p>Python 3 · Consultadas el <time datetime="2026-11-19">19 de noviembre de 2026</time>.</p>
+            <ul>
+              <li>Python · Tutorial oficial. <a href="https://docs.python.org/es/3/tutorial/controlflow.html#defining-functions">Definir funciones</a>.</li>
+              <li>Python · Referencia del lenguaje. <a href="https://docs.python.org/es/3/reference/simple_stmts.html#the-return-statement">La declaración <code>return</code></a>.</li>
+            </ul>
+          </aside>
+        </article>
+      </div>
+    </section>
+
+    <section class="state" id="carga">
+      <h2>Carga</h2>
+      <p class="state__label">Vista de un mensaje pendiente</p>
+      <div class="chat__messages">
+        <article class="chat__message chat__message--user">
+          <p class="state__label">Tú</p>
+          <p>¿Qué diferencia existe entre JavaScript y TypeScript?</p>
+        </article>
+        <div class="status-box status-box--loading">
+          <p><strong>Generando respuesta...</strong></p>
+          <p>En la versión funcional, este espacio representa el mensaje pendiente de DevLibrary AI.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state" id="error">
+      <h2>Errores recuperables</h2>
+      <p class="state__label">Cinco mensajes de ejemplo</p>
+      <div class="status-box status-box--error">
+        <h3>Error al generar la respuesta</h3>
+        <p>No se pudo obtener una respuesta en este momento. Intenta nuevamente.</p>
+      </div>
+      <div class="status-box status-box--error">
+        <h3>Fallo de conexión</h3>
+        <p>La conexión se interrumpió. Comprueba tu acceso a internet y vuelve a intentarlo.</p>
+      </div>
+      <div class="status-box status-box--error">
+        <h3>Servicio temporalmente no disponible</h3>
+        <p>El servicio está temporalmente no disponible. Intenta de nuevo más tarde o consulta la <a href="biblioteca.html">biblioteca</a>.</p>
+      </div>
+      <div class="status-box status-box--error">
+        <h3>Consulta inválida</h3>
+        <p>Escribe una pregunta técnica e indica el lenguaje o la herramienta que usas.</p>
+      </div>
+      <div class="status-box status-box--error">
+        <h3>Tiempo de espera agotado</h3>
+        <p>La respuesta tardó más de lo esperado. Prueba con una pregunta más concreta.</p>
+      </div>
+    </section>
+
+    <section class="state" id="sin-resultados">
+      <h2>Sin resultados documentales</h2>
+      <div class="chat__messages">
+        <article class="chat__message chat__message--user">
+          <p class="state__label">Tú</p>
+          <p>¿Cómo uso el complemento de caché de mi proyecto?</p>
+        </article>
+        <article class="chat__message chat__message--assistant">
+          <p class="state__label">DevLibrary AI · Orientación general</p>
+          <div class="status-box status-box--neutral">
+            <p>No encontré referencias verificadas para esa consulta. Indícame el nombre y la versión del complemento para acotar la búsqueda.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="state" id="entrada-vacia">
+      <h2>Entrada vacía</h2>
+      <form class="chat__composer">
+        <label for="consulta-vacia">Tu consulta</label>
+        <textarea id="consulta-vacia" rows="3" maxlength="3000" aria-describedby="ayuda-consulta"></textarea>
+        <button type="submit" disabled>Enviar</button>
+        <p class="chat__hint" id="ayuda-consulta">Escribe una pregunta técnica. En este formulario de muestra el envío está deshabilitado.</p>
+      </form>
+    </section>
+
+    <section class="state" id="extensa">
+      <h2>Conversación extensa</h2>
+      <p>Desplázate para leer el historial completo. El bloque de código se desplaza de forma independiente si una línea supera el ancho de la pantalla.</p>
+      <section class="chat__messages" aria-label="Historial de ejemplo" tabindex="0">
+        <article class="chat__message chat__message--user">
+          <p class="state__label">Tú</p>
+          <p>¿Puedo usar la misma función para dos libros?</p>
+        </article>
+        <article class="chat__message chat__message--assistant">
+          <p class="state__label">DevLibrary AI</p>
+          <p>Sí. Llama a <code>paginas_pendientes</code> para cada libro y guarda los resultados si quieres utilizarlos después.</p>
+        </article>
+        <article class="chat__message chat__message--user">
+          <p class="state__label">Tú</p>
+          <p>¿Puedo sumar lo que me falta por leer en ambos libros?</p>
+        </article>
+        <article class="chat__message chat__message--assistant">
+          <p class="state__label">DevLibrary AI</p>
+          <h3>Combina los resultados de dos llamadas</h3>
+          <p>Después de definir la función del <a href="#muestra">ejemplo de Python</a>, llama a la función dos veces y suma los números que devuelve.</p>
+          <pre class="code-block" tabindex="0"><code>primer_libro = paginas_pendientes(180, 65)
+segundo_libro = paginas_pendientes(210, 160)
+total_por_leer = primer_libro + segundo_libro
+print(f"Quedan {primer_libro} páginas del primer libro, {segundo_libro} del segundo y {total_por_leer} en total.")</code></pre>
+          <p>Las llamadas devuelven 115 y 50, respectivamente. El texto interpolado de la última línea requiere Python 3.6 o posterior.</p>
+        </article>
+        <article class="chat__message chat__message--user">
+          <p class="state__label">Tú</p>
+          <p>¿Qué pasa si quito la línea con <code>return</code>?</p>
+        </article>
+        <article class="chat__message chat__message--assistant">
+          <p class="state__label">DevLibrary AI</p>
+          <p>Si una función termina sin ejecutar un <code>return</code>, devuelve <code>None</code>. Si quitas la única línea del ejemplo, su cuerpo queda vacío y Python rechaza la definición. Conserva la instrucción <code>return</code> para obtener un número y poder sumarlo.</p>
+          <p><a href="#fuentes">Ver las referencias de Python</a></p>
+        </article>
+      </section>
+      <form class="chat__composer">
+        <label for="consulta-historial">Continuar la conversación</label>
+        <textarea id="consulta-historial" rows="3" maxlength="3000" aria-describedby="ayuda-historial"></textarea>
+        <button type="submit" disabled>Enviar</button>
+        <p class="chat__hint" id="ayuda-historial">Campo de muestra. El envío está deshabilitado.</p>
+      </form>
+    </section>
+
+    <section class="state" id="fuentes">
+      <h2>Fuentes disponibles</h2>
+      <aside class="chat__sources">
+        <h3>Fuentes consultadas</h3>
+        <p>Python 3 · Consultadas el <time datetime="2026-11-19">19 de noviembre de 2026</time>.</p>
+        <ul>
+          <li>Python · Tutorial oficial. <a href="https://docs.python.org/es/3/tutorial/controlflow.html#defining-functions">Definir funciones</a>. Cubre la sintaxis, los parámetros y el valor de retorno.</li>
+          <li>Python · Referencia del lenguaje. <a href="https://docs.python.org/es/3/reference/simple_stmts.html#the-return-statement">La declaración <code>return</code></a>. Describe cómo termina una llamada y qué valor devuelve.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="state" id="fuera-de-tema">
+      <h2>Consulta fuera de tema</h2>
+      <div class="chat__messages">
+        <article class="chat__message chat__message--user">
+          <p class="state__label">Tú</p>
+          <p>¿Qué puedo preparar para cenar?</p>
+        </article>
+        <article class="chat__message chat__message--assistant">
+          <p class="state__label">DevLibrary AI</p>
+          <p>Soy un asistente especializado en programación, desarrollo de software y ciberseguridad. Puedo ayudarte con documentación técnica, conceptos, errores de código y buenas prácticas.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="sub-footer">
+    <p>DevLibrary AI utiliza inteligencia artificial y puede cometer errores. Verifica la información importante y consulta las fuentes oficiales.</p>
+    <p><a href="index.html#proyecto">Proyecto y privacidad</a></p>
+  </footer>
+</body>
+</html>

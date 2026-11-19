@@ -6,7 +6,10 @@
   <meta name="description" content="DevLibrary AI, una biblioteca conversacional de programación y ciberseguridad defensiva.">
   <title>DevLibrary AI · Biblioteca técnica</title>
   <link rel="icon" href="assets/icons/brand.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/styles.css?v=html-css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/topics.js?v=ejemplos" defer></script>
+  <script src="js/library.js?v=ejemplos" defer></script>
+  <script src="js/chat.js?v=ejemplos" defer></script>
 </head>
 <body class="workspace">
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -20,119 +23,98 @@
       <a href="biblioteca.html">Biblioteca</a>
       <a href="estados.html">Estados</a>
     </nav>
+    <span class="mode">Respuestas de la biblioteca</span>
   </header>
 
   <aside class="sidebar" aria-label="Biblioteca y conversaciones">
     <nav class="sidebar__nav" aria-label="Accesos a conversación y documentación">
-      <section class="sidebar__section" aria-labelledby="biblioteca">
-        <h2 id="biblioteca">Biblioteca</h2>
+      <a class="sidebar__new" href="#consulta" aria-describedby="ayuda-consulta">
+        <img src="assets/icons/plus.svg" width="16" height="16" alt=""> Nueva conversación
+      </a>
+
+      <section class="sidebar__section" aria-labelledby="historial">
+        <h2 id="historial">Historial de ejemplo</h2>
         <ul>
-          <li><a href="biblioteca.html">Explorar lenguajes</a></li>
-          <li><a href="biblioteca.html#web">Desarrollo web</a></li>
-          <li><a href="biblioteca.html#backend">Lenguajes y backend</a></li>
-          <li><a href="biblioteca.html#datos">Bases de datos</a></li>
-          <li><a href="biblioteca.html#herramientas">Herramientas y prácticas</a></li>
-          <li><a href="biblioteca.html#seguridad">Ciberseguridad</a></li>
+          <li><a href="estados.html#muestra"><img src="assets/icons/clock.svg" width="16" height="16" alt=""> Funciones en Python</a></li>
+          <li><a href="estados.html#extensa"><img src="assets/icons/clock.svg" width="16" height="16" alt=""> Conversación extensa</a></li>
         </ul>
       </section>
 
-      <a class="sidebar__about" href="#proyecto">Acerca del proyecto</a>
+      <section class="sidebar__section" aria-labelledby="biblioteca">
+        <h2 id="biblioteca">Biblioteca</h2>
+        <ul>
+          <li><a href="biblioteca.html"><img src="assets/icons/book.svg" width="16" height="16" alt=""> Explorar lenguajes</a></li>
+          <li><a href="biblioteca.html#web"><img src="assets/icons/code.svg" width="16" height="16" alt=""> Desarrollo web</a></li>
+          <li><a href="biblioteca.html#backend"><img src="assets/icons/terminal.svg" width="16" height="16" alt=""> Lenguajes y backend</a></li>
+          <li><a href="biblioteca.html#datos"><img src="assets/icons/database.svg" width="16" height="16" alt=""> Bases de datos</a></li>
+          <li><a href="biblioteca.html#herramientas"><img src="assets/icons/tools.svg" width="16" height="16" alt=""> Herramientas y prácticas</a></li>
+          <li><a href="biblioteca.html#seguridad"><img src="assets/icons/shield.svg" width="16" height="16" alt=""> Ciberseguridad</a></li>
+        </ul>
+      </section>
+
+      <a class="sidebar__about" href="#proyecto"><img src="assets/icons/info.svg" width="16" height="16" alt=""> Acerca del proyecto</a>
     </nav>
   </aside>
 
   <main id="contenido" class="chat" tabindex="-1">
     <div class="chat__inner">
       <section class="welcome" aria-labelledby="bienvenida">
+        <div class="welcome__emblem">
+          <img src="assets/icons/brand.svg" width="68" height="68" alt="">
+        </div>
         <h1 id="bienvenida">Tu biblioteca técnica</h1>
-        <p class="welcome__description">Abre una pregunta para ver la respuesta, un ejemplo de código y su documentación.</p>
+        <p class="welcome__description">Pregunta sobre programación y ciberseguridad defensiva. DevLibrary AI busca en sus fichas y enlaza la documentación de referencia.</p>
       </section>
 
       <section class="suggestions" aria-labelledby="sugerencias">
-        <h2 id="sugerencias">Preguntas de ejemplo</h2>
-        <details class="question" name="preguntas">
-          <summary>¿Qué hace <code>console.log()</code>?</summary>
-          <div class="question__answer">
-            <p>Muestra mensajes y valores en la consola de JavaScript. Puedes abrirla desde las herramientas de desarrollo del navegador.</p>
-            <pre class="code-block" tabindex="0"><code>const total = 3 + 4;
-console.log("Total:", total); // Total: 7</code></pre>
-            <a href="https://developer.mozilla.org/es/docs/Web/API/console/log_static">MDN · console.log()</a>
-          </div>
-        </details>
-        <details class="question" name="preguntas">
-          <summary>¿Cómo se usa <code>map()</code> en JavaScript?</summary>
-          <div class="question__answer">
-            <p>Aplica una función a cada elemento de un arreglo y devuelve un arreglo nuevo con los resultados.</p>
-            <pre class="code-block" tabindex="0"><code>const numeros = [2, 3, 4];
-const dobles = numeros.map(numero =&gt; numero * 2);
-console.log(dobles); // [4, 6, 8]</code></pre>
-            <a href="https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/map">MDN · Array.prototype.map()</a>
-          </div>
-        </details>
-        <details class="question" name="preguntas">
-          <summary>¿Cómo se imprime un mensaje en Java?</summary>
-          <div class="question__answer">
-            <p><code>System.out.println()</code> escribe un mensaje en la salida estándar y agrega un salto de línea.</p>
-            <pre class="code-block" tabindex="0"><code>public class Ejemplo {
-    public static void main(String[] args) {
-        System.out.println("Hola, Java");
-    }
-}</code></pre>
-            <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/io/PrintStream.html">Oracle · PrintStream</a>
-          </div>
-        </details>
-        <details class="question" name="preguntas">
-          <summary>¿En qué se diferencian JavaScript y TypeScript?</summary>
-          <div class="question__answer">
-            <p>TypeScript añade tipos estáticos a JavaScript. Un compilador comprueba esos tipos y genera el JavaScript que se ejecuta.</p>
-            <pre class="code-block" tabindex="0"><code>function saludar(nombre: string): string {
-  return "Hola, " + nombre;
-}</code></pre>
-            <a href="https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html">Manual de TypeScript</a>
-          </div>
-        </details>
-        <details class="question" name="preguntas">
-          <summary>¿Cómo se definen las funciones en Python?</summary>
-          <div class="question__answer">
-            <p><code>def</code> define una función con un nombre y sus parámetros. <code>return</code> devuelve un resultado al código que la llamó.</p>
-            <pre class="code-block" tabindex="0"><code>def sumar(a, b):
-    return a + b
-
-print(sumar(2, 3))  # 5</code></pre>
-            <a href="https://docs.python.org/es/3/tutorial/controlflow.html#defining-functions">Python · Definir funciones</a>
-          </div>
-        </details>
-        <details class="question" name="preguntas">
-          <summary>¿Cómo se previene XSS?</summary>
-          <div class="question__answer">
-            <p>Cuando muestres texto de una persona, asigna el valor como texto. Si la aplicación admite HTML enriquecido, usa un sanitizador mantenido.</p>
-            <pre class="code-block" tabindex="0"><code>const mensaje = document.querySelector("#mensaje");
-mensaje.textContent = textoDelUsuario;</code></pre>
-            <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">OWASP · Prevención de XSS</a>
-          </div>
-        </details>
-        <details class="question" name="preguntas">
-          <summary>¿Cómo funciona una lista enlazada en C++?</summary>
-          <div class="question__answer">
-            <p>Una lista enlazada almacena valores en nodos conectados entre sí. <code>std::list</code> permite recorrerlos en ambos sentidos.</p>
-            <pre class="code-block" tabindex="0"><code>#include &lt;list&gt;
-
-int main() {
-    std::list&lt;int&gt; numeros{2, 3};
-    numeros.push_front(1); // Resultado: 1, 2, 3
-}</code></pre>
-            <a href="https://learn.microsoft.com/es-es/cpp/standard-library/list-class?view=msvc-170">Microsoft Learn · std::list</a>
-          </div>
-        </details>
+        <h2 id="sugerencias">Explora una pregunta de ejemplo</h2>
+        <ul class="suggestions__grid">
+          <li><button type="button" class="suggestion" data-question="¿En qué se diferencian JavaScript y TypeScript?" disabled>
+            <span class="suggestion__icon suggestion__icon--web"><img src="assets/icons/code.svg" width="16" height="16" alt=""></span>
+            <span><strong>JavaScript y TypeScript</strong><span>¿En qué se diferencian?</span></span>
+            <img class="suggestion__arrow" src="assets/icons/arrow.svg" width="16" height="16" alt="">
+          </button></li>
+          <li><button type="button" class="suggestion" data-question="¿Cómo se definen y se usan las funciones en Python?" disabled>
+            <span class="suggestion__icon suggestion__icon--python"><img src="assets/icons/terminal.svg" width="16" height="16" alt=""></span>
+            <span><strong>Funciones en Python</strong><span>¿Cómo se definen y se usan?</span></span>
+            <img class="suggestion__arrow" src="assets/icons/arrow.svg" width="16" height="16" alt="">
+          </button></li>
+          <li><button type="button" class="suggestion" data-question="¿Cómo se previene XSS?" disabled>
+            <span class="suggestion__icon suggestion__icon--security"><img src="assets/icons/shield.svg" width="16" height="16" alt=""></span>
+            <span><strong>Prevención de XSS</strong><span>¿Qué protege a una aplicación?</span></span>
+            <img class="suggestion__arrow" src="assets/icons/arrow.svg" width="16" height="16" alt="">
+          </button></li>
+          <li><button type="button" class="suggestion" data-question="¿Cómo funcionan las listas enlazadas en C++?" disabled>
+            <span class="suggestion__icon suggestion__icon--data"><img src="assets/icons/database.svg" width="16" height="16" alt=""></span>
+            <span><strong>Listas enlazadas en C++</strong><span>¿Cómo se organiza cada nodo?</span></span>
+            <img class="suggestion__arrow" src="assets/icons/arrow.svg" width="16" height="16" alt="">
+          </button></li>
+        </ul>
       </section>
 
-      <p><a href="estados.html#conexion">Ver ejemplo de alerta sin conexión</a></p>
+      <div id="conversacion" class="chat__history" role="log" aria-label="Conversación" tabindex="0" hidden></div>
+      <p id="estado-conexion" class="chat__connection status-box status-box--error" role="status"></p>
+
+      <form class="chat__composer" id="compositor" novalidate>
+        <label for="consulta">Tu consulta técnica</label>
+        <div class="chat__input">
+          <textarea id="consulta" rows="2" maxlength="3000" placeholder="Escribe una pregunta de programación…" aria-describedby="ayuda-consulta estado-consulta" required></textarea>
+          <button type="submit" disabled>
+            <img src="assets/icons/send.svg" width="18" height="18" alt="">
+            <span class="visually-hidden">Enviar consulta</span>
+          </button>
+        </div>
+        <p id="ayuda-consulta" class="chat__hint">Enter envía la consulta. Mayús + Enter agrega una línea.</p>
+        <p id="estado-consulta" class="chat__hint" role="status"></p>
+        <noscript><p class="chat__hint">Activa JavaScript para usar el chat. También puedes consultar la biblioteca directamente.</p></noscript>
+      </form>
     </div>
 
     <footer class="workspace-footer">
       <p>Las fichas pueden contener errores. Verifica la información importante en la documentación oficial.</p>
       <details class="project-info">
         <summary>Proyecto y privacidad</summary>
-        <p id="proyecto" tabindex="-1">Las respuestas y alertas son ejemplos estáticos. Esta página no envía consultas ni comprueba tu conexión.</p>
+        <p id="proyecto" tabindex="-1">La búsqueda funciona en tu navegador. Antes de responder, el chat comprueba que puede conectarse al sitio sin transmitir tu pregunta. Lo que escribes se mantiene en esta página hasta que la cierres, la recargues o inicies otra conversación.</p>
         <p><a href="biblioteca.html">Documentación oficial</a> · <a href="estados.html">Estados de la maqueta</a></p>
       </details>
     </footer>

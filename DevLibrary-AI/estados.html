@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Estados del chat | DevLibrary AI</title>
   <link rel="icon" href="assets/icons/brand.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/styles.css?v=html-css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="subpage">
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -25,17 +25,18 @@
 
   <main class="page" id="contenido" tabindex="-1">
     <header class="page-intro">
+      <p class="eyebrow">Vista previa</p>
       <h1>Estados del chat</h1>
-      <p>Ejemplos estáticos de mensajes, alertas y errores del chat.</p>
+      <p>Estás conversando con DevLibrary AI, un asistente de inteligencia artificial especializado en programación y ciberseguridad.</p>
+      <p><strong>Maqueta estática.</strong> Los mensajes son ejemplos y el texto que escribas aquí se queda en el campo.</p>
     </header>
 
     <nav class="section-nav" aria-label="Estados de la conversación">
       <ul>
-        <li><a href="index.html">Preguntas de ejemplo</a></li>
+        <li><a href="index.html">Inicio sin mensajes</a></li>
         <li><a href="#muestra">Respuesta</a></li>
         <li><a href="#carga">Carga</a></li>
         <li><a href="#error">Errores</a></li>
-        <li><a href="#conexion">Sin conexión</a></li>
         <li><a href="#sin-resultados">Sin referencias</a></li>
         <li><a href="#entrada-vacia">Entrada vacía</a></li>
         <li><a href="#extensa">Historial largo</a></li>
@@ -92,8 +93,8 @@ print(pendientes)  # 115</code></pre>
           <p>¿Qué diferencia existe entre JavaScript y TypeScript?</p>
         </article>
         <div class="status-box status-box--loading">
-          <p><strong>Pensando…</strong></p>
-          <p>Ejemplo de una consulta pendiente.</p>
+          <p><strong>Generando respuesta...</strong></p>
+          <p>En la versión funcional, este espacio representa el mensaje pendiente de DevLibrary AI.</p>
         </div>
       </div>
     </section>
@@ -105,14 +106,13 @@ print(pendientes)  # 115</code></pre>
         <h3>Error al generar la respuesta</h3>
         <p>No se pudo obtener una respuesta en este momento. Intenta nuevamente.</p>
       </div>
-      <div class="status-box status-box--error" id="conexion">
+      <div class="status-box status-box--error">
         <h3>Sin conexión a internet</h3>
         <p>Código de error <code>ERR_INTERNET_DISCONNECTED</code></p>
         <p>El navegador no recibió una respuesta HTTP. Comprueba el Wi-Fi o los datos móviles y vuelve a intentar la consulta cuando recuperes la conexión.</p>
       </div>
       <div class="status-box status-box--error">
         <h3>Servicio temporalmente no disponible</h3>
-        <p>Código de ejemplo <code>HTTP 503</code></p>
         <p>El servicio está temporalmente no disponible. Intenta de nuevo más tarde o consulta la <a href="biblioteca.html">biblioteca</a>.</p>
       </div>
       <div class="status-box status-box--error">
@@ -223,7 +223,7 @@ print(f"Quedan {primer_libro} páginas del primer libro, {segundo_libro} del seg
   </main>
 
   <footer class="sub-footer">
-    <p>Verifica la información importante en la documentación oficial.</p>
+    <p>DevLibrary AI utiliza inteligencia artificial y puede cometer errores. Verifica la información importante y consulta las fuentes oficiales.</p>
     <p><a href="index.html#proyecto">Proyecto y privacidad</a></p>
   </footer>
 </body>

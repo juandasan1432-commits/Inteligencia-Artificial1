@@ -15,3 +15,5 @@ En **Chat**, abre una pregunta con clic, Enter o Espacio. En **Estados**, recorr
 | Fuera de tema | [Alcance](../estados.html#fuera-de-tema) | Ejemplo de una redirección a temas técnicos. |
 
 Para comprobar la maqueta, abre y cierra las preguntas con el teclado, visita **Sin conexión** y comprueba que el código aparezca en el panel de error. Repite en una ventana estrecha para revisar el foco y el desplazamiento de los bloques de código.
+
+En el [chat local](http://localhost:8071/), escribe «Dame ejemplos de JS» y después «¿Qué es un map?». Deben aparecer ejemplos y documentación, con JavaScript como tema del seguimiento. Una consulta fuera del catálogo muestra el aviso «No encontré una respuesta».

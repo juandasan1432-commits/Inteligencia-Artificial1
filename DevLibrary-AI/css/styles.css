@@ -313,7 +313,9 @@ a:hover { color: var(--text); }
 
 .chat__history .chat__message p { white-space: pre-wrap; }
 .chat__history .chat__message small { display: block; color: var(--muted); }
+#estado-consulta { color: var(--danger); }
 #estado-consulta:empty { margin-block-start: calc(-1 * var(--s2)); }
+.chat__composer [aria-invalid="true"] { border-color: var(--danger); }
 
 .chat__hint,
 .workspace-footer,
@@ -478,6 +480,23 @@ code { font-family: var(--mono); }
 .status-box--error { border-inline-start-color: var(--danger); background: var(--danger-bg); }
 .status-box--loading { min-block-size: 6rem; border-inline-start-color: var(--mint); }
 .status-box--neutral { border-inline-start-color: var(--amber); }
+
+.chat__connection { margin-block-end: var(--s3); }
+.chat__connection:empty { margin: 0; padding: 0; border: 0; }
+.chat__pending { min-block-size: auto; }
+.chat__history .status-box h2 { font-size: 1rem; }
+
+.chat__retry {
+  justify-self: start;
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--field-line);
+  border-radius: var(--r1);
+  background: var(--raised);
+  color: var(--text);
+}
+
+.chat__retry:not(:disabled) { cursor: pointer; }
+.chat__retry:not(:disabled):hover { border-color: var(--mint); }
 
 .status-box--loading::before {
   content: "";

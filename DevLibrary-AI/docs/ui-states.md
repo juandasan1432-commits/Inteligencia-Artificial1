@@ -22,6 +22,11 @@ Usa **Estados** en el encabezado para explorar los ejemplos de interfaz y **Chat
 4. Activa la opción de reducir movimiento del sistema y vuelve a Carga. El texto permanece visible y el indicador queda quieto.
 5. En Inicio, escribe una pregunta y pulsa Intro para ver la respuesta. Mayús + Intro agrega una línea. Prueba también los cuatro botones de preguntas sugeridas.
 
-## Transiciones previstas
+## Estados del chat
 
-La búsqueda actual presenta una ficha o un mensaje de ausencia de cobertura. Una integración con servidor añadiría estados de carga, cancelación y reintento.
+- **Pensando.** Al enviar una consulta, el chat muestra un indicador y deja el envío en pausa hasta que termina la búsqueda. El indicador permanece visible brevemente mientras se consulta la biblioteca local.
+- **Respuesta.** El resultado reemplaza el indicador y presenta la ficha y sus referencias.
+- **Sin respuesta.** Cuando la búsqueda queda sin coincidencias, el chat muestra un error y propone reformular la consulta. Si encuentra varias fichas igual de relevantes, muestra un aviso para pedir más precisión.
+- **Error al procesar la consulta.** Si falla la búsqueda, el chat muestra un mensaje y ofrece volver a intentar la misma consulta.
+- **Sin conexión.** Si el navegador detecta que perdió la conexión, aparece un aviso junto al compositor. Las fichas ya cargadas siguen disponibles. El aviso desaparece cuando el navegador vuelve a detectar conexión.
+- **Consulta inválida.** Una entrada vacía o que excede el límite se señala en el compositor antes de iniciar la búsqueda.

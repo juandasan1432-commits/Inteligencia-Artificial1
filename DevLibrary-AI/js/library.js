@@ -178,7 +178,7 @@ function matchQuery(question, previous) {
   if (ranked.length) {
     // Evita elegir arbitrariamente cuando una pregunta coincide igual con dos fichas.
     if (ranked[1]?.score === ranked[0].score) {
-      return { summary: `Encontré varias fichas. ¿Quieres saber sobre ${ranked[0].card.title} o sobre ${ranked[1].card.title}?` };
+      return { kind: 'clarify', summary: `Encontré varias fichas. ¿Quieres saber sobre ${ranked[0].card.title} o sobre ${ranked[1].card.title}?` };
     }
     return ranked[0].card;
   }
@@ -194,5 +194,8 @@ function matchQuery(question, previous) {
   if (/^(?:hola|buenas|buenos dias|buenas tardes|buenas noches)$/.test(query)) {
     return { summary: '¡Hola! Pregúntame sobre programación. Puedes empezar con «¿Cómo se usa JOIN en SQL?».' };
   }
-  return { summary: 'No encontré una ficha para esa pregunta. Prueba con el nombre de la tecnología y el concepto, por ejemplo «¿Cómo funcionan las promesas en JavaScript?».', reference: true };
+  return {
+    kind: 'unanswered',
+    summary: 'No encontré una ficha para esa pregunta. Prueba con el nombre de la tecnología y el concepto, por ejemplo «¿Cómo funcionan las promesas en JavaScript?».',
+  };
 }

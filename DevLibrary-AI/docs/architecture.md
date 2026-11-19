@@ -24,8 +24,8 @@ DevLibrary AI es una biblioteca conversacional en HTML, CSS y JavaScript. La por
 | `WelcomeScreen` | Bienvenida y botones de consultas que muestran su respuesta en el chat. |
 | `ChatMessage` | Mensaje identificable por su autor y estructura visual. Una respuesta extensa reúne título, definición técnica, explicación sencilla, ejemplo, funcionamiento y buenas prácticas. |
 | `ChatComposer` | Formulario con etiqueta, campo multilínea y envío con botón o Enter. Mayús + Enter agrega una línea. |
-| `LoadingIndicator` | Representación de la espera con mensaje pendiente y texto de estado visible. |
-| `ErrorMessage` | Mensaje comprensible y orientación para recuperarse. El reintento operativo depende de la conexión futura. |
+| `LoadingIndicator` | Indicador «Pensando» durante la búsqueda local. Se reemplaza por el resultado. |
+| `ErrorMessage` | Avisos de entrada inválida, falta de resultados, fallo interno con reintento y pérdida de conexión. |
 | `CodeBlock` | `pre` y `code` con lenguaje visible y desplazamiento horizontal en el propio bloque. |
 | `SourcesList` | Lista de referencias con enlaces descriptivos. En la muestra las referencias se presentan con el alcance indicado en la página. |
 | `AIDisclaimer` | Aviso sobre posibles errores en las fichas y recomendación de verificar información importante. |

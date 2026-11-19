@@ -93,11 +93,12 @@
       </section>
 
       <div id="conversacion" class="chat__history" role="log" aria-label="Conversación" tabindex="0" hidden></div>
+      <p id="estado-conexion" class="chat__connection status-box status-box--error" role="status"></p>
 
-      <form class="chat__composer" id="compositor">
+      <form class="chat__composer" id="compositor" novalidate>
         <label for="consulta">Tu consulta técnica</label>
         <div class="chat__input">
-          <textarea id="consulta" rows="2" maxlength="3000" placeholder="Escribe una pregunta de programación…" aria-describedby="ayuda-consulta" required></textarea>
+          <textarea id="consulta" rows="2" maxlength="3000" placeholder="Escribe una pregunta de programación…" aria-describedby="ayuda-consulta estado-consulta" required></textarea>
           <button type="submit" disabled>
             <img src="assets/icons/send.svg" width="18" height="18" alt="">
             <span class="visually-hidden">Enviar consulta</span>

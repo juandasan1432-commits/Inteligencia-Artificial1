@@ -1,14 +1,14 @@
 # DevLibrary AI
 
-Maqueta navegable en español para una biblioteca conversacional de programación y ciberseguridad defensiva. Usa HTML5, CSS3 e iconos SVG locales.
+Biblioteca conversacional en español sobre programación y ciberseguridad defensiva. Usa HTML5, CSS3, JavaScript e iconos SVG locales.
 
 ## Cómo abrirla
 
 1. Extrae el ZIP y abre `index.html` en un navegador moderno.
-2. En **Biblioteca** puedes explorar los cinco grupos temáticos y abrir sus referencias.
-3. En **Estados** puedes recorrer los ejemplos de conversación, fuentes, carga y error.
+2. Escribe una consulta y pulsa **Enter** o **Enviar consulta**. También puedes hacer clic en cualquiera de las cuatro preguntas sugeridas para enviarla al chat.
+3. En **Biblioteca** puedes explorar los temas y sus referencias. En **Estados** puedes recorrer ejemplos de interfaz.
 
-La maqueta abre directamente desde el disco, sin instalación ni servidor. Los enlaces a documentación externa requieren conexión. Los formularios permiten escribir un borrador en pantalla con el envío deshabilitado.
+El chat busca fichas en el navegador y muestra explicaciones, ejemplos y referencias. Si una consulta queda fuera de la cobertura de las fichas, avisa y sugiere reformularla. Los enlaces a documentación externa requieren conexión.
 
 ## Archivos
 
@@ -16,16 +16,17 @@ La maqueta abre directamente desde el disco, sin instalación ni servidor. Los e
 - [biblioteca.html](biblioteca.html) reúne enlaces oficiales y fuentes primarias por tecnología.
 - [estados.html](estados.html) reúne las vistas de ejemplo y una respuesta educativa sobre funciones de Python.
 - [css/styles.css](css/styles.css) centraliza los tokens visuales, distribución, componentes y adaptación a pantalla.
+- `js/topics.js` contiene las fichas introductorias del kit DevAtlas. `js/library.js` añade fichas por concepto y selecciona la respuesta. `js/chat.js` conecta las consultas y los botones con la conversación.
 - `assets/icons/` contiene la marca y los iconos locales.
 - [Arquitectura](docs/architecture.md) explica los componentes, las decisiones técnicas y los contratos propuestos.
 - [Estados](docs/ui-states.md) documenta las vistas y cómo comprobarlas.
 
 ## Alcance de esta versión
 
-La navegación, los enlaces, el desplegable de privacidad y el campo de texto usan controles nativos. Las conversaciones, la carga y los errores se ilustran con contenido fijo. El envío, el historial persistente, la generación de respuestas, la recuperación documental y la copia de código requieren integración futura.
+Las respuestas proceden de fichas seleccionadas por coincidencias de tema y concepto. La conversación vive en la página y se vacía al recargarla o iniciar otra. La generación libre de respuestas y la persistencia del historial son integraciones futuras.
 
-La entrega aplica estructura semántica, foco visible, contraste, diseños de una y dos columnas, reducción de movimiento y desplazamiento independiente para el código. La maqueta carece de dependencias de ejecución, telemetría y credenciales. Los ejemplos citados distinguen la documentación usada para prepararlos de los enlaces generales del catálogo.
+La interfaz ofrece navegación por teclado, foco visible, reducción de movimiento y desplazamiento independiente para el código. El chat funciona sin dependencias externas, telemetría ni credenciales.
 
 ## Verificación
 
-Se revisaron la estructura HTML, los enlaces internos, los recursos SVG y las referencias del catálogo. En Chromium con JavaScript desactivado se comprobó la adaptación de las tres páginas a 320, 390, 768, 1024 y 1440 píxeles, el recorrido por teclado, el movimiento reducido, el desplazamiento de código e historial, y el comportamiento local de los formularios. La prueba en este entorno usó un servidor HTTP local porque la política de Chromium bloquea las URL `file://`.
+Prueba una consulta escrita, cada botón sugerido y una consulta fuera de cobertura. Comprueba que cada respuesta aparezca en la conversación, que los ejemplos se puedan leer en móvil y que las referencias abran la documentación correspondiente.

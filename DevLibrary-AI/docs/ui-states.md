@@ -1,10 +1,10 @@
 # Estados de la interfaz
 
-Los ejemplos son contenido estático. Usa **Estados** en el encabezado para saltar a cada vista.
+Usa **Estados** en el encabezado para explorar los ejemplos de interfaz y **Chat** para enviar consultas reales a la biblioteca local.
 
 | Estado | Vista | Comportamiento de la maqueta |
 | --- | --- | --- |
-| Vacío inicial | [Inicio](../index.html) | Bienvenida, identificación de IA, cuatro preguntas sugeridas y compositor. Las sugerencias abren una respuesta guardada o una referencia del catálogo. |
+| Vacío inicial | [Inicio](../index.html) | Bienvenida, compositor y cuatro botones que envían preguntas sugeridas al chat. |
 | Carga | [Mensaje pendiente](../estados.html#carga) | Consulta de ejemplo, texto «Generando respuesta...» e indicador visual con un espacio reservado. La preferencia de movimiento reducido detiene el giro. |
 | Respuesta | [Funciones en Python](../estados.html#muestra) | Mensajes con autor, definición técnica, explicación sencilla, código, funcionamiento, prácticas y fuentes. El código muestra lenguaje y salida esperada. |
 | Error | [Cinco ejemplos de error](../estados.html#error) | Generación fallida, conexión fallida, servicio no disponible, entrada inválida y tiempo agotado. Cada mensaje ofrece orientación contextual. |
@@ -20,8 +20,8 @@ Los ejemplos son contenido estático. Usa **Estados** en el encabezado para salt
 2. En una ventana estrecha, comprueba que **Chat**, **Biblioteca** y **Estados** siguen accesibles. Recorre los temas del catálogo desde Biblioteca y los historiales de muestra desde Estados.
 3. En Historial largo, enfoca la zona de mensajes y usa las flechas para desplazarte. En un bloque largo, usa el desplazamiento horizontal dentro del bloque.
 4. Activa la opción de reducir movimiento del sistema y vuelve a Carga. El texto permanece visible y el indicador queda quieto.
-5. Escribe un borrador y pulsa Intro. El campo agrega una línea. El compositor no transmite la consulta.
+5. En Inicio, escribe una pregunta y pulsa Intro para ver la respuesta. Mayús + Intro agrega una línea. Prueba también los cuatro botones de preguntas sugeridas.
 
 ## Transiciones previstas
 
-El cliente futuro validará el borrador y podrá iniciar la carga, cancelar, mostrar la respuesta o recuperar un error conservando el texto. El servidor determinará si hay fuentes verificadas. Los anuncios de cambios y la gestión del foco se incorporarán y probarán junto con esas transiciones. La copia de código requiere una acción de cliente con confirmación accesible.
+La búsqueda actual presenta una ficha o un mensaje de ausencia de cobertura. Una integración con servidor añadiría estados de carga, cancelación y reintento.

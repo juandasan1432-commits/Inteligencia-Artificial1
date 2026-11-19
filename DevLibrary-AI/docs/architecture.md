@@ -1,6 +1,6 @@
 # Arquitectura de DevLibrary AI
 
-DevLibrary AI es una maqueta navegable en HTML5 y CSS3. La consulta de ejemplo y los estados tienen contenido fijo. La navegación entre páginas, las anclas y los enlaces a documentación oficial funcionan como enlaces HTML. El compositor representa la futura interacción con el chatbot. La comunicación con un servidor y las transiciones entre estados corresponden a una integración posterior.
+DevLibrary AI es una biblioteca conversacional en HTML, CSS y JavaScript. La portada envía consultas al buscador local. Este normaliza las palabras y ordena las fichas por tema y coincidencias de concepto. La interfaz muestra el resultado como texto, código y enlaces. La galería de estados contiene ejemplos independientes.
 
 ## Estructura
 
@@ -10,24 +10,25 @@ DevLibrary AI es una maqueta navegable en HTML5 y CSS3. La consulta de ejemplo y
 | `estados.html` | Galería de estados. `#muestra` lleva a la respuesta de ejemplo sobre funciones en Python. |
 | `biblioteca.html` | Catálogo de tecnologías y enlaces a documentación oficial. |
 | `css/styles.css` | Tokens, estilos base, distribución, componentes, estados y adaptación al tamaño de la pantalla. |
+| `js/` | Fichas introductorias, recuperación por tema y concepto, y manejo de la conversación. |
 | `assets/icons/` | Identidad gráfica e iconos locales. |
 | `docs/` | Arquitectura y [guía de estados](ui-states.md). |
-| `README.md` | Instrucciones para abrir y recorrer la maqueta. |
+| `README.md` | Instrucciones para abrir y usar el chat. |
 
 ## Componentes
 
 | Componente | Función y estructura |
 | --- | --- |
-| `ChatHeader` | Encabezado con marca, nombre del asistente e identificación como IA. |
+| `ChatHeader` | Encabezado con marca y modo de respuestas de la biblioteca. |
 | `Sidebar` | Navegación complementaria, biblioteca, categorías, ciberseguridad e historial de muestra. Usa enlaces para los destinos disponibles. |
-| `WelcomeScreen` | Sección inicial con un encabezado, descripción y sugerencias para explorar la maqueta. |
+| `WelcomeScreen` | Bienvenida y botones de consultas que muestran su respuesta en el chat. |
 | `ChatMessage` | Mensaje identificable por su autor y estructura visual. Una respuesta extensa reúne título, definición técnica, explicación sencilla, ejemplo, funcionamiento y buenas prácticas. |
-| `ChatComposer` | Formulario con etiqueta, `textarea` multilínea, ayuda contextual y acción de envío deshabilitada. `index.html#consulta` lleva al campo principal. |
+| `ChatComposer` | Formulario con etiqueta, campo multilínea y envío con botón o Enter. Mayús + Enter agrega una línea. |
 | `LoadingIndicator` | Representación de la espera con mensaje pendiente y texto de estado visible. |
 | `ErrorMessage` | Mensaje comprensible y orientación para recuperarse. El reintento operativo depende de la conexión futura. |
 | `CodeBlock` | `pre` y `code` con lenguaje visible y desplazamiento horizontal en el propio bloque. |
 | `SourcesList` | Lista de referencias con enlaces descriptivos. En la muestra las referencias se presentan con el alcance indicado en la página. |
-| `AIDisclaimer` | Aviso permanente sobre posibles errores de IA y recomendación de verificar información importante. |
+| `AIDisclaimer` | Aviso sobre posibles errores en las fichas y recomendación de verificar información importante. |
 | `TechnologyCard` | Tarjeta de tecnología o categoría con nombre, descripción y documentación de referencia. |
 
 ## Implementación visual y accesibilidad
@@ -35,8 +36,8 @@ DevLibrary AI es una maqueta navegable en HTML5 y CSS3. La consulta de ejemplo y
 - La semántica nativa separa encabezado, navegación, contenido principal y pie. Los títulos describen cada sección, los enlaces indican su destino y los campos tienen etiqueta. El orden de lectura se conserva al cambiar de ancho.
 - La hoja compartida centraliza la paleta oscura, tipografía, espaciado y dimensiones en propiedades CSS. Grid organiza las regiones y tarjetas. Flexbox alinea grupos de controles y elementos de navegación. La tipografía de sistema y los iconos locales reducen solicitudes externas.
 - En pantallas estrechas el contenido se reordena en una columna. En anchos mayores la navegación lateral deja espacio para una columna de lectura acotada. Los mensajes se adaptan al ancho disponible y el código largo se desplaza dentro de su bloque.
-- El diseño aplica pautas WCAG 2.2 AA para foco visible, contraste, etiquetas y navegación por teclado. Los estados usan texto además de color. `prefers-reduced-motion` permite reducir las animaciones. Al añadir actualizaciones dinámicas, evaluar `role="log"`, `aria-live="polite"` y `aria-busy` con lectores de pantalla para evitar anuncios redundantes y conservar el foco en el compositor.
-- El desplegable «Proyecto y privacidad» de `index.html#proyecto` explica el tratamiento de las consultas y los enlaces externos. La maqueta mantiene el texto en el campo de edición durante su uso, sin envío, historial persistente ni telemetría. Al abrir documentación externa, se aplican las condiciones del sitio de destino.
+- El diseño ofrece foco visible, contraste, etiquetas y navegación por teclado. El historial usa `role="log"` y el foco vuelve al compositor tras el envío. `prefers-reduced-motion` permite reducir las animaciones de la galería.
+- El desplegable «Proyecto y privacidad» de `index.html#proyecto` explica el tratamiento de las consultas y los enlaces externos. Las consultas se procesan en el navegador y se conservan en la página. Al abrir documentación externa, se aplican las condiciones del sitio de destino.
 
 ## Contrato propuesto para la integración
 

@@ -220,6 +220,8 @@ a:hover { color: var(--text); }
   gap: var(--s3);
   align-items: center;
   height: 100%;
+  width: 100%;
+  text-align: start;
   min-block-size: 4.25rem;
   padding: var(--s2) var(--s3);
   border: 1px solid var(--line);
@@ -229,6 +231,7 @@ a:hover { color: var(--text); }
 }
 
 .suggestion:hover { background: var(--panel); border-color: var(--field-line); }
+.suggestion:not(:disabled) { cursor: pointer; }
 
 .suggestion__icon {
   display: grid;
@@ -296,6 +299,21 @@ a:hover { color: var(--text); }
 
 .chat__input button { padding: var(--s2); }
 .chat__composer button:disabled { color: var(--muted); cursor: default; }
+.chat__composer button:not(:disabled) { background: var(--mint-bg); border-color: var(--mint-line); cursor: pointer; }
+.chat__composer button:not(:disabled):hover { border-color: var(--mint); }
+
+.chat__history:not([hidden]) {
+  display: grid;
+  gap: var(--s4);
+  max-block-size: min(55vh, 30rem);
+  margin-block-end: var(--s5);
+  padding: var(--s2);
+  overflow-y: auto;
+}
+
+.chat__history .chat__message p { white-space: pre-wrap; }
+.chat__history .chat__message small { display: block; color: var(--muted); }
+#estado-consulta:empty { margin-block-start: calc(-1 * var(--s2)); }
 
 .chat__hint,
 .workspace-footer,

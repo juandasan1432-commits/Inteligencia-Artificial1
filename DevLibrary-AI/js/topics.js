@@ -146,9 +146,9 @@ const technologyCards = [
   {
     "id": "java",
     "title": "Java",
-    "summary": "Lenguaje orientado a objetos que suele ejecutarse sobre la JVM. Se usa mucho en aplicaciones empresariales y Android histórico.",
-    "code": "class Hola {\n  public static void main(String[] args) {\n    System.out.println(\"Hola\");\n  }\n}",
-    "detail": "La JVM inicia el método main y escribe el mensaje.",
+    "summary": "Java es un lenguaje con tipos estáticos que normalmente se ejecuta en la máquina virtual de Java (JVM).",
+    "code": "class Hola {\n  public static void main(String[] args) {\n    System.out.println(\"Hola, Java\");\n\n    int total = 2 + 3;\n    System.out.println(\"Total: \" + total); // Total: 5\n  }\n}",
+    "detail": "main es el punto de entrada. El primer println imprime un saludo. El segundo muestra el resultado de una suma guardada en una variable de tipo int.",
     "sources": [
       [
         "Java",
@@ -160,12 +160,12 @@ const technologyCards = [
     "id": "javascript",
     "title": "JavaScript",
     "summary": "Lenguaje de programación de alto nivel con funciones, objetos y ejecución en navegador o servidor. Da comportamiento a las páginas y a muchos programas.",
-    "code": "const numeros = [3, 5, 7];\nconst doble = numeros.map(n => n * 2);\nconsole.log(doble);",
-    "detail": "map recorre el arreglo y construye otro con cada resultado: [6, 10, 14].",
+    "code": "// 1. Mostrar un mensaje\nconsole.log(\"Hola, JavaScript\");\n\n// 2. Usar una función con argumentos\nfunction sumar(a, b) {\n  return a + b;\n}\nconsole.log(sumar(2, 3)); // 5\n\n// 3. Transformar un arreglo\nconst numeros = [3, 5, 7];\nconst doble = numeros.map(n => n * 2);\nconsole.log(doble); // [6, 10, 14]",
+    "detail": "Puedes pegar los ejemplos en la consola del navegador. console.log muestra cada resultado. map crea un arreglo con el doble de cada número.",
     "sources": [
       [
-        "JavaScript",
-        "https://developer.mozilla.org/es/docs/Web/JavaScript"
+        "MDN — Guía de JavaScript",
+        "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide"
       ]
     ]
   },

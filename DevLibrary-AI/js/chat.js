@@ -60,6 +60,7 @@ function renderAnswer(answer) {
   }
   if (answer.kind === 'clarify') {
     addFeedback(response, 'Aclara tu pregunta', answer.summary, 'neutral');
+    addReferences(response, answer.sources);
     return response;
   }
   if (answer.title) response.append(element('h2', answer.title));
@@ -173,7 +174,7 @@ async function completeQuestion(request) {
   try {
     const answer = matchQuery(question, previousAnswer);
     response = renderAnswer(answer);
-    if (answer.sources) previousAnswer = answer;
+    if (answer.topics) previousAnswer = answer;
   } catch {
     response = renderError(question, {
       title: 'Error al procesar la consulta',

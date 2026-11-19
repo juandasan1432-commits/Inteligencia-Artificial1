@@ -1,5 +1,77 @@
 const conceptCards = [
   {
+    title: 'console.log() en JavaScript',
+    topics: ['javascript', 'typescript', 'nodejs'],
+    terms: ['console log', 'console', 'consola', 'consol log', 'consolelog', 'imprimir en javascript', 'imprimir en js', 'print to console'],
+    summary: 'console es el objeto que da acceso a la consola del entorno. Su método console.log() muestra mensajes y valores. En el navegador aparecen en las herramientas de desarrollo y en Node.js se escriben en la terminal.',
+    code: 'console.log("Hola, mundo");\n\nconst total = 3 + 4;\nconsole.log("Total:", total); // Total: 7\n\nconsole.log({ producto: "Libro", precio: 12 });',
+    detail: 'Puedes pasar varios argumentos para ver una etiqueta junto a su valor. Es útil para depurar sin modificar el contenido de la página.',
+    sources: [['MDN — console.log()', 'https://developer.mozilla.org/es/docs/Web/API/console/log_static']],
+  },
+  {
+    title: 'Variables en JavaScript',
+    topics: ['javascript', 'typescript', 'nodejs'],
+    terms: ['variable', 'variables', 'const', 'let', 'var', 'declarar una variable'],
+    summary: 'Usa const cuando el nombre conservará el mismo valor y let cuando necesites reasignarlo. Ambas declaraciones tienen alcance de bloque.',
+    code: 'const nombre = "Ana";\nlet puntos = 0;\npuntos += 10;\nconsole.log(nombre, puntos); // Ana 10',
+    detail: 'Una declaración con const impide reasignar el nombre. El contenido de un objeto guardado en esa constante puede cambiar.',
+    sources: [['MDN — Gramática y tipos', 'https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Grammar_and_types']],
+  },
+  {
+    title: 'Funciones en JavaScript',
+    topics: ['javascript', 'typescript', 'nodejs'],
+    terms: ['funcion', 'funciones', 'function', 'functions', 'arrow function', 'arrow functions', 'funcion flecha', 'funciones flecha'],
+    summary: 'Una función agrupa una tarea reutilizable. Puede recibir argumentos y devolver un valor con return. Las funciones flecha ofrecen una sintaxis abreviada.',
+    code: 'function saludar(nombre) {\n  return "Hola, " + nombre;\n}\n\nconst duplicar = numero => numero * 2;\nconsole.log(saludar("Ana")); // Hola, Ana\nconsole.log(duplicar(4)); // 8',
+    detail: 'saludar devuelve un texto. duplicar usa el retorno implícito de una función flecha escrita como una sola expresión.',
+    sources: [['MDN — Funciones', 'https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Functions']],
+  },
+  {
+    title: 'Bucles en JavaScript',
+    topics: ['javascript', 'typescript', 'nodejs'],
+    terms: ['bucle', 'bucles', 'ciclo', 'ciclos', 'for', 'while', 'for of'],
+    summary: 'Usa for...of para recorrer los valores de un arreglo. Usa while cuando quieras repetir mientras se cumpla una condición.',
+    code: 'const nombres = ["Ana", "Luis"];\nfor (const nombre of nombres) {\n  console.log(nombre);\n}',
+    detail: 'El bucle imprime Ana y luego Luis. La variable nombre toma un valor nuevo en cada iteración.',
+    sources: [['MDN — Bucles e iteración', 'https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Loops_and_iteration']],
+  },
+  {
+    title: 'Map en JavaScript',
+    topics: ['javascript', 'typescript', 'nodejs'],
+    terms: ['map objeto', 'new map', 'map clave valor', 'map claves', 'clave valor en javascript'],
+    summary: 'Map almacena pares de clave y valor. Usa set para guardar un valor, get para recuperarlo y has para comprobar que existe su clave.',
+    code: 'const precios = new Map();\nprecios.set("libro", 12);\nconsole.log(precios.get("libro")); // 12\nconsole.log(precios.has("libro")); // true',
+    detail: 'Para transformar los elementos de un arreglo, consulta Array.prototype.map().',
+    sources: [['MDN — Map', 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Map']],
+  },
+  {
+    title: 'System.out.println() en Java',
+    topics: ['java'],
+    terms: ['system out println', 'system out print', 'println', 'printstream', 'consola', 'imprimir en java', 'console log en java', 'console log java'],
+    summary: 'System.out es el flujo de salida estándar de Java. println() escribe un valor y termina la línea. print() escribe el valor y deja el cursor en la misma línea.',
+    code: 'public class Ejemplo {\n    public static void main(String[] args) {\n        System.out.println("Hola, mundo");\n        int total = 3 + 4;\n        System.out.println("Total: " + total);\n    }\n}',
+    detail: 'Guarda este ejemplo en Ejemplo.java. Al ejecutar la clase, la salida muestra Hola, mundo y Total: 7 en líneas separadas.',
+    sources: [['Oracle — PrintStream', 'https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/io/PrintStream.html']],
+  },
+  {
+    title: 'Map en Java',
+    topics: ['java'],
+    terms: ['map', 'hashmap', 'map objeto', 'mapa', 'pares clave valor'],
+    summary: 'Map<K,V> es la interfaz de Java para asociar claves únicas con valores. HashMap es una de sus implementaciones. put guarda una asociación y get recupera el valor de una clave.',
+    code: 'import java.util.HashMap;\nimport java.util.Map;\n\npublic class Ejemplo {\n    public static void main(String[] args) {\n        Map<String, Integer> precios = new HashMap<>();\n        precios.put("libro", 12);\n        System.out.println(precios.get("libro")); // 12\n    }\n}',
+    detail: 'String indica el tipo de cada clave e Integer el tipo de cada valor.',
+    sources: [['Oracle — Interfaz Map', 'https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Map.html']],
+  },
+  {
+    title: 'Clases y métodos en Java',
+    topics: ['java'],
+    terms: ['clase', 'clases', 'metodo', 'metodos', 'constructor', 'constructores', 'objetos', 'class'],
+    summary: 'Una clase define datos y métodos. Un objeto es una instancia de esa clase. El constructor inicializa los datos del objeto cuando lo creas con new.',
+    code: 'class Libro {\n    private final String titulo;\n\n    Libro(String titulo) {\n        this.titulo = titulo;\n    }\n\n    String describir() {\n        return "Libro: " + titulo;\n    }\n}',
+    detail: 'Si creas new Libro("Aprende Java"), el método describir() de esa instancia devuelve Libro: Aprende Java.',
+    sources: [['dev.java — Classes and Objects', 'https://dev.java/learn/classes-objects/']],
+  },
+  {
     title: 'JavaScript y TypeScript',
     topics: ['javascript', 'typescript'],
     needsAllTopics: true,
@@ -57,11 +129,14 @@ const conceptCards = [
   {
     title: 'Arreglos en JavaScript',
     topics: ['javascript', 'typescript'],
-    terms: ['arreglo', 'arreglos', 'array', 'arrays', 'map', 'filter', 'reduce', 'foreach'],
+    terms: ['arreglo', 'arreglos', 'array', 'arrays', 'map', 'array map', 'array prototype map', 'filter', 'reduce', 'foreach'],
     summary: 'Un arreglo guarda una secuencia de valores. map transforma cada elemento, filter selecciona los que cumplen una condición y reduce combina valores en un resultado.',
     code: 'const numeros = [2, 3, 4];\nconsole.log(numeros.map(n => n * 2)); // [4, 6, 8]\nconsole.log(numeros.filter(n => n > 2)); // [3, 4]',
-    detail: 'map conserva la cantidad de elementos. filter puede devolver menos elementos. Ambos crean un arreglo nuevo.',
-    sources: [['MDN — Array', 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array']],
+    detail: 'map conserva la cantidad de elementos. filter puede devolver menos elementos. Ambos crean un arreglo nuevo. Map, con mayúscula, es una estructura de clave y valor.',
+    sources: [
+      ['MDN — Array.prototype.map()', 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/map'],
+      ['MDN — Array', 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array'],
+    ],
   },
   {
     title: 'Promesas y async/await en JavaScript',
@@ -135,7 +210,7 @@ const aliases = {
   go: ['golang', 'lenguaje go', 'programacion en go'],
   html: ['html5'],
   css: ['css3'],
-  javascript: ['js', 'ecmascript'],
+  javascript: ['js', 'ecmascript', 'javascrip', 'javascipt'],
   typescript: ['ts'],
   nodejs: ['nodejs', 'node'],
   nextjs: ['nextjs'],
@@ -147,15 +222,23 @@ function normalizeQuery(value) {
   return value.toLowerCase().normalize('NFD')
     .replace(/\p{M}/gu, '')
     .replace(/\bc\+\+/g, 'cplusplus').replace(/\bc#/g, 'csharp')
-    .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+    .replace(/[^\p{L}\p{N}]+/gu, ' ').trim()
+    .replace(/\bjava script\b/g, 'javascript')
+    .replace(/\b(node|next) js\b/g, '$1js');
 }
 
+const examplePrompt = /^(?:(?:dame|dime|muestra|muestrame|pon|ponme|quiero|necesito|puedes darme|puedes mostrarme) )?(?:(?:un|unos|algunos|otros|varios|dos|tres) )?ejemplos?(?: (?:de|en|con|sobre))?(?: |$)|^(?:show me |give me )?(?:some |an )?examples?(?: (?:of|in|with))?(?: |$)/;
+const topicPrompt = /^(?:que es|que significa|como funciona|para que sirve|explica(?:me)?|define|introduccion a|quiero aprender(?: sobre)?|hablame de|what is|documentacion(?: de| sobre)?|referencias?(?: de| sobre)?|docs(?: de| for)?) /;
+
 function matchQuery(question, previous) {
-  const query = normalizeQuery(question);
+  const query = normalizeQuery(question.replace(/(?<![.\p{L}\p{N}_])Map\b/gu, 'Map objeto'))
+    .replace(/ por favor$/, '');
   const has = term => ` ${query} `.includes(` ${normalizeQuery(term)} `);
+  const target = query.replace(examplePrompt, '').replace(topicPrompt, '');
+  const wantsExamples = examplePrompt.test(query);
   const topics = technologyCards.filter(card => {
     if (card.id === 'c' || card.id === 'go') {
-      return query === normalizeQuery(card.title) || aliases[card.id].some(has);
+      return target === normalizeQuery(card.title) || aliases[card.id].some(has);
     }
     return [card.title, ...(aliases[card.id] ?? [])].some(has);
   });
@@ -166,7 +249,11 @@ function matchQuery(question, previous) {
       : !ids.length || card.topics.some(topic => ids.includes(topic)))
     .map(card => ({
       card,
-      score: card.terms.reduce((total, term) => total + (has(term) ? 1 + term.split(' ').length : 0), 0),
+      score: card.terms.reduce((best, term) => {
+        const words = normalizeQuery(term);
+        if (!has(words)) return best;
+        return Math.max(best, 2 * words.split(' ').length + (target === words ? 1 : 0));
+      }, 0),
     }))
     .filter(match => match.score > 0)
     .map(match => ({
@@ -178,21 +265,38 @@ function matchQuery(question, previous) {
   if (ranked.length) {
     // Evita elegir arbitrariamente cuando una pregunta coincide igual con dos fichas.
     if (ranked[1]?.score === ranked[0].score) {
-      return { kind: 'clarify', summary: `Encontré varias fichas. ¿Quieres saber sobre ${ranked[0].card.title} o sobre ${ranked[1].card.title}?` };
+      const [first, second] = ranked.map(match => match.card);
+      return {
+        kind: 'clarify',
+        summary: `¿Quieres saber sobre ${first.title} o sobre ${second.title}?`,
+        sources: [first.sources[0], second.sources[0]],
+      };
     }
     return ranked[0].card;
   }
-  if (!ids.length && previous && /^(?:(?:dame|muestra|muestrame) )?(?:un )?ejemplo(?: por favor)?$/.test(query)) {
-    return { ...previous, summary: 'Este ejemplo muestra el concepto de la ficha anterior.' };
+  if (!target && wantsExamples && previous) {
+    if (previous.code) return { ...previous, summary: 'Este ejemplo muestra el concepto de la ficha anterior.' };
+    const topic = technologyCards.find(card => previous.topics?.length === 1 && previous.topics[0] === card.id);
+    if (topic) return { ...topic, topics: previous.topics };
   }
   if (ids.length === 1) {
     const card = topics[0];
     const names = [card.title, ...(aliases[card.id] ?? [])].map(normalizeQuery);
-    const target = query.replace(/^(?:que es|que significa|como funciona|para que sirve|explica(?:me)?|define|ejemplo de|introduccion a|quiero aprender(?: sobre)?|hablame de) /, '').replace(/ por favor$/, '');
     if (names.includes(target)) return { ...card, topics: ids };
   }
   if (/^(?:hola|buenas|buenos dias|buenas tardes|buenas noches)$/.test(query)) {
     return { summary: '¡Hola! Pregúntame sobre programación. Puedes empezar con «¿Cómo se usa JOIN en SQL?».' };
+  }
+  if (topics.length) {
+    const related = conceptCards.filter(card => card.topics.some(topic => ids.includes(topic)))
+      .slice(0, 3).map(card => card.title);
+    return {
+      title: `Documentación de ${topics.map(card => card.title).join(' y ')}`,
+      summary: 'No encontré una ficha para el concepto que pediste. Puedes buscarlo en la documentación de la tecnología.',
+      detail: related.length ? `También puedes preguntar por ${related.join(', ')}.` : '',
+      sources: topics.slice(0, 3).flatMap(card => card.sources),
+      topics: ids,
+    };
   }
   return {
     kind: 'unanswered',

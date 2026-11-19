@@ -23,7 +23,7 @@ El chat requiere conexión para responder. Busca fichas en el navegador y muestr
 
 ## Alcance de esta versión
 
-Las respuestas proceden de fichas seleccionadas por coincidencias de tema y concepto. La conversación vive en la página y se vacía al recargarla o iniciar otra. La generación libre de respuestas y la persistencia del historial son integraciones futuras.
+Las respuestas proceden de fichas seleccionadas por tema, concepto y expresiones como «dame ejemplos de JS». Si falta una ficha y se reconoce la tecnología, el chat enlaza su documentación. La conversación vive en la página y se vacía al recargarla o iniciar otra.
 
 La interfaz ofrece navegación por teclado, foco visible, reducción de movimiento y desplazamiento independiente para el código. El chat funciona sin dependencias externas, telemetría ni credenciales.
 
